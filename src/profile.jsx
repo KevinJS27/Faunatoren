@@ -52,6 +52,7 @@ const Profile = () => {
         ) : (
           "No user metadata defined"
         )}
+        { console.log(user) }
       </div>
     )
   );
