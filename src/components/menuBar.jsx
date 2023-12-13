@@ -1,5 +1,5 @@
-// import './../style/grid/_index.scss'
-// import './../style/components/menubar.scss'
+import './../style/grid/_index.scss'
+import '../style/components/menubar.scss'
 import faunaTorenLogo from './../assets/faunatoren_logo.png'
 import userIcon from './../assets/userIcon.svg'
 
