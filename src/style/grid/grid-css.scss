@@ -1,0 +1,32 @@
+@use "grid-variables" as *;
+
+.container-fluid {
+    padding: 0 0;
+    margin: 0 auto;
+
+    .container {
+        margin: 0 auto;
+    }
+}
+
+
+.container {
+    width: 100%;
+    padding: $grid-padding;
+    margin: $grid-padding auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+.col {
+    flex: 1 0 auto;
+} 
