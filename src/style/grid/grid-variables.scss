@@ -1,0 +1,11 @@
+// Define breakpoints
+$grid-breakpoints: (
+    "sm":	576px, 
+    "md":	768px,
+    "lg":	992px,
+    "xl":	1200px,
+    "xxl":	1400px
+);
+
+$grid-columns: 12 !default;
+$grid-padding: 15px;
