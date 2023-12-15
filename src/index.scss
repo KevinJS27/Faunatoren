@@ -1,0 +1,14 @@
+html, body{
+    padding: 0px;
+    margin: 0px;
+    min-height: 100vh;
+}
+
+#root{
+    display: flex;
+}
+
+.page{
+    padding: 1rem;
+    background-color: #cefec6;
+}

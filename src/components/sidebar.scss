@@ -1,0 +1,12 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3px;
+    background-color: rgb(0, 128, 58);
+
+    > img {
+        margin: 5px 0;
+    }
+}
+

@@ -1,11 +1,16 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
+// Login/ Auth0
 import { Auth0Provider } from '@auth0/auth0-react';
-// import App from './App';
 import LoginButton from './loginBtn';
 import LogoutButton from './logoutBtn';
 import Profile from './profile';
+
+// components
+// import App from './App';
 import MenuBar from './components/menuBar';
+import Dashboard from './components/dashboard';
 
 // css
 import './style/index.scss'
@@ -26,6 +31,9 @@ root.render(
 
     {/* Menu */}
     <MenuBar />
+
+    {/* Context */}
+    <Dashboard/>
 
     {/* Login buttons*/}
     <div className="container">
