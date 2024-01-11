@@ -1,24 +1,25 @@
 import "./../style/components/dashboard.scss"
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
-import React,{ useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
-let labels = ["January", "February", "March", "April", "May", "June"];
 
-let airPressure = [];
-let CO2 = [];
-let weight = [];
-let humidity = [];
-let presences = [];
-let temperature = [];
+let data = {
+    airPressure: [],
+    CO2: [],
+    weight: [],
+    humidity: [],
+    presences: [],
+    temperature: []
+}
 
 function Dashboard() {
 
     let [state, setState] = useState({
-        labels: labels,
+        labels: ["Loading..."],
         datasets: [
             {
-                label: "My First dataset",
+                label: "Loading data",
                 backgroundColor: "rgb(255, 99, 132)",
                 borderColor: "rgb(255, 99, 132)",
                 data: [0, 10, 5, 2, 20, 30, 45],
@@ -26,23 +27,37 @@ function Dashboard() {
         ],
     });
 
-    console.log(state);
-
-
     function click() {
-        console.log("es");
-        setState({
-            labels: labels,
-            datasets: [
-                {
-                    label: "My First ejiofjwier",
-                    backgroundColor: "rgb(1, 1, 132)",
-                    borderColor: "rgb(255, 99, 132)",
-                    data: [100, 10, 5, 25, 23, 50, 55],
-                },
-            ],
-        });
-        console.log(state);
+        getData(setState);
+
+        // let labels = [];
+        // let values = [];
+
+        // console.log(data);
+        // data.temperature.forEach(element => {
+        //     console.log(element);
+
+        //     // Key (time)
+        //     let newDate = new Date(element.key);
+        //     console.log(newDate);
+        //     labels.push(newDate.getMonth() + " " + newDate.getDate());
+
+        //     // Value
+        //     values.push(element.value);
+
+        // });
+
+        // setState({
+        //     labels: labels,
+        //     datasets: [
+        //         {
+        //             label: "Temperatuur",
+        //             backgroundColor: "rgb(1, 1, 132)",
+        //             borderColor: "rgb(255, 99, 132)",
+        //             data: [100, 10, 5, 25, 23, 50, 55],
+        //         },
+        //     ],
+        // });
     }
 
     return (
@@ -67,8 +82,7 @@ function Dashboard() {
                     </select>
                 </div>
             </div>
-            <Line data={state} />
-            {getData()}
+            <Line className="temperature" data={state} />
             <button onClick={click}>
                 Click me!
             </button>
@@ -76,25 +90,64 @@ function Dashboard() {
     )
 };
 
-function getData() {
+function getData(setState) {
+    // Empty the arrays
+    data.airPressure = [];
+    data.CO2 = [];
+    data.weight = [];
+    data.humidity = [];
+    data.presences = [];
+    data.temperature = [];
 
+
+    // Get the data from the API
     fetch('http://avans.duckdns.org:1880/sensor?limit=10')
         .then(
             response => response.json()
         )
         .then(result => {
 
+            // Set the new data in the arrays
             result.forEach(r => {
-                airPressure.push(r.decoded_payload.luminosity_3 / 100);
-                CO2.push(r.decoded_payload.luminosity_5 * 10);
-                weight.push(r.decoded_payload.luminosity_6 / 10);
-                humidity.push(r.decoded_payload.relative_humidity_1)
-                presences.push(r.decoded_payload.relative_humidity_4);
-                temperature.push({ key: r.time, value: r.decoded_payload.temperature_2 / 10 });
+                data.airPressure.push(r.decoded_payload.luminosity_3 / 100);
+                data.CO2.push(r.decoded_payload.luminosity_5 * 10);
+                data.weight.push(r.decoded_payload.luminosity_6 / 10);
+                data.humidity.push(r.decoded_payload.relative_humidity_1)
+                data.presences.push(r.decoded_payload.relative_humidity_4);
+                data.temperature.push({ key: r.time, value: r.decoded_payload.temperature_2 / 10 });
             });
 
-            console.table(temperature);
-        });
+            // Set in temperature diagram
+            // Transform the data
+            let labels = [];
+            let values = [];
+
+            data.temperature.forEach(element => {
+                console.log(element);
+
+                // Key (time)
+                let newDate = new Date(element.key);
+                console.log(newDate);
+                labels.push(newDate.getMonth() + " " + newDate.getDate());
+
+                // Value
+                values.push(element.value);
+            });
+
+            setState({
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Temperatuur",
+                        backgroundColor: "rgb(1, 1, 132)",
+                        borderColor: "rgb(255, 99, 132)",
+                        data: [100, 10, 5, 25, 23, 50, 55],
+                    },
+                ],
+            });
+        }
+        );
+    console.log(data);
 }
 
 export default Dashboard
