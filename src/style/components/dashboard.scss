@@ -3,7 +3,7 @@
     border: none;
     font-size: 1.1em;
 
-    &:not(:last-child){
+    &:not(:last-child) {
         border-radius: 3px;
         margin: 15px;
     }
@@ -11,4 +11,76 @@
 
 .wr-diagram {
     background-color: #7cd38e;
+    padding: 10px;
+
+    h2 {
+        display: block;
+        margin: 0 0 15px 0;
+
+        + span {
+            margin: 20px 0;
+            display: block;
+            text-align: center;
+
+            &.wr-temperature {
+                display: relative;
+
+                span {
+                    font-weight: bold;
+                    margin-right: 0.5rem;
+                }
+
+                sup::before {
+                    content: "";
+                    position: absolute;
+                    height: 0.25rem;
+                    width: 0.25rem;
+                    margin-left: -5px;
+                    background-color: transparent;
+                    border: solid black 1px;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}
+
+/* 
+    The graphs/sliders 
+    The slider handle override browser default look
+    -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox)
+ */
+.wr-slider {
+    .scale{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 8px;
+        width: calc(100%);
+        background: rgb(66, 153, 225);
+        background: linear-gradient(90deg, rgba(66, 153, 225, 1) 0%, rgba(72, 187, 120, 1) 50%, rgba(237, 137, 54, 1) 100%);
+        border-radius: 15px
+    }
+
+    .slider::-moz-range-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 5px;
+        height: 25px;
+        border-radius: 15px;
+        background: black;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 5px;
+        height: 25px;
+        border-radius: 15px;
+        background: black;
+    }
 }
