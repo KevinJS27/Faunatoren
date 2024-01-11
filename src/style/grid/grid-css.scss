@@ -9,10 +9,8 @@
     }
 }
 
-
 .container {
     width: 100%;
-    padding: $grid-padding;
     margin: $grid-padding auto;
 }
 
@@ -24,9 +22,11 @@
         flex-shrink: 0;
         width: 100%;
         max-width: 100%;
+        padding: 0 $grid-padding;
     }
 }
 
 .col {
     flex: 1 0 auto;
+    padding: 0 $grid-padding;
 } 
