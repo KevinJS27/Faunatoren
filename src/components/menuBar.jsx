@@ -17,14 +17,17 @@ function MenuBar() {
                             <li>Torens</li>
                             <li>Huisjes</li>
                             <li>icon</li>
-                            <li><img src={userIcon} className="User" alt="Gebruiker informatie" /></li>
+                            <li><img onClick={userProfile()} src={userIcon} className="User" alt="Gebruiker informatie" /></li>
                         </menu>
                     </div>
                 </div>
             </div>
         </div>
-
     )
+}
+
+function userProfile(){
+    console.log("few");
 }
 
 export default MenuBar
