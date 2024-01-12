@@ -33,6 +33,7 @@ function Dashboard() {
             .then((response) => response.json())
 
             .then((result) => {
+                // Create empty arrays
                 let time = [];
                 let temperatures = [];
                 let pressure = [];
@@ -43,12 +44,13 @@ function Dashboard() {
                     const timeString = changeDateFormat(currentItem.time);
                     time.push(timeString);
     
+                    // Fill the arrays with data
                     temperatures.push(currentItem.decoded_payload.temperature_2 / 10);
                     pressure.push(currentItem.decoded_payload.luminosity_3 / 100);
                     CO2.push(currentItem.decoded_payload.luminosity_5 * 10);
                 });
 
-
+                // Update the state
                 newUpdateDataset("temperature", "temperatuur", time, temperatures);
                 newUpdateDataset("pressure", "Druk", time, pressure);
                 newUpdateDataset("CO2", "CO2", time, CO2);
@@ -122,7 +124,7 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram">
                             <h2>Druk</h2>
-                            <span className="wr-pressure">{state.pressure.datasets[0].data[0]}<sup>C</sup></span>
+                            <span className="wr-pressure">{state.pressure.datasets[0].data[0]}<sub>Bar</sub></span>
                             <div className="wr-slider">
                                 <div className="scale">
                                     <span>0.5</span><span>1.5</span>
@@ -136,10 +138,10 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram">
                             <h2>Co2</h2>
-                            <span className="wr-CO2">{state.temperature.datasets[0].data[0]}<sup>C</sup></span>
+                            <span className="wr-CO2">{state.CO2.datasets[0].data[0]}<sub>PPM</sub></span>
                             <div className="wr-slider">
                                 <div className="scale">
-                                    <span>0</span><span>1</span>
+                                    <span>0K</span><span>2K</span>
                                 </div>
                                 <input readOnly type="range" min="0" max="2000" step="0.1" value={500} className="slider" id="myRange" />
                             </div>
