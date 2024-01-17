@@ -1,6 +1,6 @@
 // Huisjes.jsx
 import React, { useState } from 'react';
-import './huisjes.scss';
+import './../style/components/huisjes.scss';
 
 const Huisjes = () => {
   const [huisjes, setHuisjes] = useState([
