@@ -19,7 +19,7 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root'));
 
 function App() {
-  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   const handleMenuItemClick = (menuItem) => {
     setSelectedMenu(menuItem);
