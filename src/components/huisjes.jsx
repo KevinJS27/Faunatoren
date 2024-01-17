@@ -1,12 +1,11 @@
 // Huisjes.jsx
 import React, { useState } from 'react';
-import './Huisjes.scss';
+import './huisjes.scss';
 
 const Huisjes = () => {
   const [huisjes, setHuisjes] = useState([
     { id: 1, toren: 'Toren 1', locatie: 'Amsterdam', aantal: 3 },
     { id: 2, toren: 'Toren 2', locatie: 'Utrecht', aantal: 5 },
-    // ... voeg meer huisjes toe zoals nodig
   ]);
 
   const [editHuisje, setEditHuisje] = useState(null);
