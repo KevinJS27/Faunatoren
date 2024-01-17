@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 
 // Login/ Auth0
 import { Auth0Provider } from '@auth0/auth0-react';
-import LoginButton from './loginBtn';
-import LogoutButton from './logoutBtn';
-import Profile from './profile';
+import LoginButton from './style/components/auth/loginBtn';
+import LogoutButton from './style/components/auth/logoutBtn';
+import Profile from './style/components/auth/profile';
 
 // components
 import MenuBar from './components/menuBar';
