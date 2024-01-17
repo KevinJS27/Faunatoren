@@ -1,7 +1,7 @@
 .menubar {
     background-color: #1C5628;
     color: white;
-    box-shadow: 0 15px 15px 0 rgba(0,0,0, 0.25);
+    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.25);
 }
 
 .menu {
@@ -13,7 +13,11 @@
     li {
         margin-top: auto;
         margin-bottom: auto;
-        padding: 0 5px;
+        margin: auto 1rem;
+
+        &:hover {
+            cursor: pointer;
+        }
 
         &:first-child {
             padding-left: 0;
