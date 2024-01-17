@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // Login/ Auth0
@@ -8,46 +8,52 @@ import LogoutButton from './logoutBtn';
 import Profile from './profile';
 
 // components
-// import App from './App';
 import MenuBar from './components/menuBar';
 import Dashboard from './components/dashboard';
 import DashboardToren from './components/torens';
 
 // css
-import './style/index.scss'
-import './style/grid/_index.scss'
+import './style/index.scss';
+import './style/grid/_index.scss';
 
 const root = createRoot(document.getElementById('root'));
 
-root.render(
-  <Auth0Provider
-    domain="kjschollen.eu.auth0.com"
-    clientId="cernTRpK8SxCXwI69sA594JLHc6FlrU4"
-    authorizationParams={{
-      redirect_uri: window.location.origin,
-      // audience: "http://localhost:3000/",
-      // scope: "read:current_user update:current_user_metadata"
-    }}
-  >
+function App() {
+  const [selectedMenu, setSelectedMenu] = useState(null);
 
-    {/* Menu */}
-    <MenuBar />
+  const handleMenuItemClick = (menuItem) => {
+    setSelectedMenu(menuItem);
+  };
 
-    {/* Context */}
-    {/* <Dashboard/> */}
+  return (
+    <Auth0Provider
+      domain="kjschollen.eu.auth0.com"
+      clientId="cernTRpK8SxCXwI69sA594JLHc6FlrU4"
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        // audience: "http://localhost:3000/",
+        // scope: "read:current_user update:current_user_metadata"
+      }}
+    >
+      {/* Menu */}
+      <MenuBar onMenuItemClick={handleMenuItemClick} />
 
-    {/* Context */}
-    <DashboardToren/>
+      {/* Conditionally render components based on selected menu item */}
+      {selectedMenu === 'dashboard' && <Dashboard />}
+      {selectedMenu === 'torens' && <DashboardToren />}
 
-    {/* Login buttons*/}
-    <div className="container">
-      <div className="row">
-        <div className="col-12">
-          <LoginButton />
-          <LogoutButton />
-          <Profile />
+      {/* Login buttons*/}
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <LoginButton />
+            <LogoutButton />
+            <Profile />
+          </div>
         </div>
       </div>
-    </div>
-  </Auth0Provider>,
-);
+    </Auth0Provider>
+  );
+}
+
+root.render(<App />);
