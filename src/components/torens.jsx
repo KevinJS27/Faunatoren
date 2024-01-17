@@ -1,6 +1,6 @@
 // torens.jsx
 import React, { useState } from 'react';
-import './torens.scss';
+import './../style/components/torens.scss';
 
 const Torens = () => {
   const [torens, setTorens] = useState([

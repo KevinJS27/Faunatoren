@@ -11,6 +11,7 @@ import Profile from './profile';
 // import App from './App';
 import MenuBar from './components/menuBar';
 import Dashboard from './components/dashboard';
+import DashboardToren from './components/torens';
 
 // css
 import './style/index.scss'
@@ -33,7 +34,10 @@ root.render(
     <MenuBar />
 
     {/* Context */}
-    <Dashboard/>
+    {/* <Dashboard/> */}
+
+    {/* Context */}
+    <DashboardToren/>
 
     {/* Login buttons*/}
     <div className="container">
