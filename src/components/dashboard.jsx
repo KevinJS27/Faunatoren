@@ -28,11 +28,15 @@ function Dashboard() {
 
     // Fetch data from the API
     function getData() {
-        fetch("http://avans.duckdns.org:1880/sensor?limit=10")
+        fetch("http://avans.duckdns.org:1880/sensor?limit=20")
             // Change response to JSON
             .then((response) => response.json())
 
             .then((result) => {
+                
+                // Reverse the array so that it makes more sense in the line graph
+                result.reverse();
+
                 // Create empty arrays
                 let time = [];
                 let temperatures = [];
@@ -124,7 +128,7 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram">
                             <h2>Druk</h2>
-                            <span className="wr-pressure">{state.pressure.datasets[0].data[0]}<sub>Bar</sub></span>
+                            <span className="wr-pressure">{state.pressure.datasets[0].data[0]}<span>Bar</span></span>
                             <div className="wr-slider">
                                 <div className="scale">
                                     <span>0.5</span><span>1.5</span>
@@ -138,7 +142,7 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram">
                             <h2>Co2</h2>
-                            <span className="wr-CO2">{state.CO2.datasets[0].data[0]}<sub>PPM</sub></span>
+                            <span className="wr-CO2">{state.CO2.datasets[0].data[0]}<span>PPM</span></span>
                             <div className="wr-slider">
                                 <div className="scale">
                                     <span>0K</span><span>2K</span>

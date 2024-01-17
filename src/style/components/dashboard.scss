@@ -3,7 +3,7 @@
     border: none;
     font-size: 1.1em;
 
-    &:not(:last-child) {
+    &:last-child {
         border-radius: 3px;
         margin: 15px;
     }
@@ -21,7 +21,10 @@
             margin: 20px 0;
             display: block;
             text-align: center;
+            font-size: 2.2rem;
+            font-weight: bold;
 
+            // Align the temperature icon
             &.wr-temperature {
                 display: relative;
 
@@ -35,11 +38,16 @@
                     position: absolute;
                     height: 0.25rem;
                     width: 0.25rem;
-                    margin-left: -5px;
+                    margin-left: -4px;
                     background-color: transparent;
                     border: solid black 1px;
                     border-radius: 50%;
                 }
+            } 
+
+            // Make the text smaller next the the numbers
+            &:not(.wr-temperature) span{
+                font-size: 1.5rem;
             }
         }
     }
