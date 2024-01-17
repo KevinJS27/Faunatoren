@@ -8,6 +8,7 @@
     display: flex;
     list-style-type: none;
     padding-left: 0;
+    margin: 0;
 
     li {
         margin-top: auto;
@@ -26,6 +27,8 @@
                 display: block;
                 margin-top: auto;
                 margin-bottom: auto;
+                height: 25px;
+                aspect-ratio: 1/1;
             }
         }
     }

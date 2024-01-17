@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "engines": {
-    "node": ">=18.0.0" 
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.3",
+    "chart.js": "^4.4.1",
     "jose": "^5.1.1",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
