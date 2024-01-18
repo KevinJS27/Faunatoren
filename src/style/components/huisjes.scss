@@ -56,4 +56,28 @@
         cursor: pointer;
       }
     }
-  }
+    dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      padding: 16px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    
+      p {
+        margin-bottom: 16px;
+      }
+    
+      button {
+        padding: 8px 16px;
+        margin-right: 8px;
+        cursor: pointer;
+        border: none;
+        background-color: #4caf50;
+        color: white;
+      }
+    }
+}

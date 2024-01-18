@@ -11,6 +11,9 @@ const Huisjes = () => {
   const [editHuisje, setEditHuisje] = useState(null);
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', locatie: '', aantal: 0 });
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteHuisjeId, setDeleteHuisjeId] = useState(null);
+
   const handleToevoegen = () => {
     setHuisjes([...huisjes, { id: Date.now(), ...nieuwHuisje }]);
     setNieuwHuisje({ toren: '', locatie: '', aantal: 0 });
@@ -25,8 +28,20 @@ const Huisjes = () => {
   };
 
   const handleVerwijderen = id => {
-    const gefilterdeHuisjes = huisjes.filter(huis => huis.id !== id);
+    setDeleteHuisjeId(id);
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmVerwijderen = () => {
+    const gefilterdeHuisjes = huisjes.filter(huis => huis.id !== deleteHuisjeId);
     setHuisjes(gefilterdeHuisjes);
+    setShowDeleteDialog(false);
+    setDeleteHuisjeId(null);
+  };
+
+  const handleCancelVerwijderen = () => {
+    setShowDeleteDialog(false);
+    setDeleteHuisjeId(null);
   };
 
   return (
@@ -69,6 +84,13 @@ const Huisjes = () => {
           <button onClick={handleToevoegen}>Toevoegen</button>
         )}
       </div>
+      {showDeleteDialog && (
+        <dialog open>
+          <p>Weet je zeker dat je dit huisje wilt verwijderen?</p>
+          <button onClick={handleConfirmVerwijderen}>Ja</button>
+          <button onClick={handleCancelVerwijderen}>Nee</button>
+        </dialog>
+      )}
     </div>
   );
 };
