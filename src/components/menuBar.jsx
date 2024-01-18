@@ -4,7 +4,11 @@ import faunaTorenLogo from './../assets/faunatoren_logo.png'
 import userIcon from './../assets/userIcon.svg'
 
 
-function MenuBar() {
+function MenuBar({onMenuItemClick}) {
+
+    const handleMenuItemClick = (menuItem) => {
+        onMenuItemClick(menuItem);
+    };
 
     
 
@@ -15,11 +19,17 @@ function MenuBar() {
                     <div className="row">
                         <menu className="col-sm menu">
                             <img src={faunaTorenLogo} className="logo" alt="Faunatoren logo" />
-                            <li>Dashboard</li>
-                            <li>Torens</li>
-                            <li>Huisjes</li>
-                            <li>icon</li>
-                            <li><img onClick={userProfile()} src={userIcon} className="User" alt="Gebruiker informatie" /></li>
+                            <li onClick={() => handleMenuItemClick('dashboard')}>Dashboard</li>
+                            <li onClick={() => handleMenuItemClick('torens')}>Torens</li>
+                            <li onClick={() => handleMenuItemClick('huisjes')}>Huisjes</li>
+                            <li>
+                                <img
+                                    onClick={() => handleMenuItemClick('user')}
+                                    src={userIcon}
+                                    className="User"
+                                    alt="Gebruiker informatie"
+                                />
+                            </li>
                         </menu>
                     </div>
                 </div>
@@ -27,10 +37,6 @@ function MenuBar() {
         </div>
     )
     }
-
-function userProfile(){
-    console.log("few");
-}
 
 
 
