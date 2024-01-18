@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 
 // Login/ Auth0
 import { Auth0Provider } from '@auth0/auth0-react';
-import LoginButton from './loginBtn';
-import LogoutButton from './logoutBtn';
-import Profile from './profile';
+import LoginButton from './components/auth/loginBtn';
+import LogoutButton from './components/auth/logoutBtn';
+import Profile from './components/auth/profile';
 
 // components
 import MenuBar from './components/menuBar';
@@ -17,13 +17,27 @@ import DashboardHuisjes from './components/huisjes';
 import './style/index.scss';
 import './style/grid/_index.scss';
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root')).render(<App/>);
 
 function App() {
-  const [selectedMenu, setSelectedMenu] = useState(null);
+  // State for the homepage
+  const [selectedMenu, setSelectedMenu] = useState('dashboard');
 
+  // State for the user
+  const [user,setUser] = useState({name:"test",email:"email"}); 
+
+  // Function that handles the menu clicks
   const handleMenuItemClick = (menuItem) => {
-    setSelectedMenu(menuItem);
+    // If the user clicks on the user icon
+    if (menuItem == "user") {
+      // Toggle the menu
+      let bool = JSON.parse(document.getElementById("user").dataset.open);
+      document.getElementById("user").setAttribute("data-open", !bool);
+    }
+    else {
+      setSelectedMenu(menuItem);
+      console.log(user);
+    }
   };
 
   return (
@@ -37,7 +51,7 @@ function App() {
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} />
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />
 
       {/* Conditionally render components based on selected menu item */}
       {selectedMenu === 'dashboard' && <Dashboard />}
@@ -51,12 +65,10 @@ function App() {
           <div className="col-12">
             <LoginButton />
             <LogoutButton />
-            <Profile />
+            <Profile user={setUser}/>
           </div>
         </div>
       </div>
     </Auth0Provider>
   );
 }
-
-root.render(<App />);
