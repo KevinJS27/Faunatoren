@@ -1,153 +1,173 @@
-import "./../style/components/dashboard.scss"
+import "./../style/components/dashboard.scss";
+import Chart from 'chart.js/auto'; // https://stackoverflow.com/questions/67727603/error-category-is-not-a-registered-scale
 import { Line } from "react-chartjs-2";
-import Chart from "chart.js/auto";
 import React, { useState, useEffect } from "react";
-
-
-let data = {
-    airPressure: [],
-    CO2: [],
-    weight: [],
-    humidity: [],
-    presences: [],
-    temperature: []
-}
 
 function Dashboard() {
 
-    let [state, setState] = useState({
+    const initialDatasetState = {
         labels: ["Loading..."],
         datasets: [
             {
                 label: "Loading data",
-                backgroundColor: "rgb(255, 99, 132)",
-                borderColor: "rgb(255, 99, 132)",
-                data: [0, 10, 5, 2, 20, 30, 45],
+                borderColor: "black",
+                data: [],
             },
         ],
+    };
+
+    let [state, setState] = useState({
+        temperature: { ...initialDatasetState },
+        CO2: { ...initialDatasetState },
+        pressure: { ...initialDatasetState },
     });
 
-    function click() {
-        getData(setState);
+    useEffect(() => {
+        getData();
+    }, []); // Empty dependency array to run only on mount
 
-        // let labels = [];
-        // let values = [];
+    // Fetch data from the API
+    function getData() {
+        fetch("http://avans.duckdns.org:1880/sensor?limit=20")
+            // Change response to JSON
+            .then((response) => response.json())
 
-        // console.log(data);
-        // data.temperature.forEach(element => {
-        //     console.log(element);
+            .then((result) => {
+                
+                // Reverse the array so that it makes more sense in the line graph
+                result.reverse();
 
-        //     // Key (time)
-        //     let newDate = new Date(element.key);
-        //     console.log(newDate);
-        //     labels.push(newDate.getMonth() + " " + newDate.getDate());
+                // Create empty arrays
+                let time = [];
+                let temperatures = [];
+                let pressure = [];
+                let CO2 = [];
 
-        //     // Value
-        //     values.push(element.value);
+                result.forEach((currentItem) => {
+                    // Change time format
+                    const timeString = changeDateFormat(currentItem.time);
+                    time.push(timeString);
+    
+                    // Fill the arrays with data
+                    temperatures.push(currentItem.decoded_payload.temperature_2 / 10);
+                    pressure.push(currentItem.decoded_payload.luminosity_3 / 100);
+                    CO2.push(currentItem.decoded_payload.luminosity_5 * 10);
+                });
 
-        // });
+                // Update the state
+                newUpdateDataset("temperature", "temperatuur", time, temperatures);
+                newUpdateDataset("pressure", "Druk", time, pressure);
+                newUpdateDataset("CO2", "CO2", time, CO2);
+            });
+    }
 
-        // setState({
-        //     labels: labels,
-        //     datasets: [
-        //         {
-        //             label: "Temperatuur",
-        //             backgroundColor: "rgb(1, 1, 132)",
-        //             borderColor: "rgb(255, 99, 132)",
-        //             data: [100, 10, 5, 25, 23, 50, 55],
-        //         },
-        //     ],
-        // });
+    // Changes date format
+    function changeDateFormat(date) {
+        let dateObject = new Date(date);
+        let newDate = dateObject.getDate() + "/" + (dateObject.getMonth() + 1) + " " + dateObject.getHours() + ":" + dateObject.getMinutes()
+        return newDate;
+    }
+
+    // Update a object in the state
+    function newUpdateDataset(property, label, time, value) {
+        setState((prevState) => ({
+            ...prevState,
+            [property]: {
+                ...prevState[property],
+                datasets: [
+                    {
+                        label: label,
+                        data: value,
+                    },
+                ],
+                labels: time,
+            },
+        }));
     }
 
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col-12">
-                    <h1>Dashboard</h1>
-                    {/* Select torens */}
-                    <select name="Torens" id="torens" className="select">
-                        <option value="toren1">toren</option>
-                        <option value="toren2">toren2</option>
-                        <option value="toren3">toren3</option>
-                        <option value="toren4">toren4</option>
-                    </select>
+        <>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <h1>Dashboard</h1>
+                        {/* Select torens */}
+                        <select name="Torens" id="torens" className="select">
+                            <option value="toren1">toren</option>
+                            <option value="toren2">toren2</option>
+                            <option value="toren3">toren3</option>
+                            <option value="toren4">toren4</option>
+                        </select>
 
-                    {/* Select huisjes */}
-                    <select name="Huisjes" id="huisjes" className="select">
-                        <option value="Huisje1">Huisje1</option>
-                        <option value="Huisje2">Huisje2</option>
-                        <option value="Huisje3">Huisje3</option>
-                        <option value="Huisje4">Huisje4</option>
-                    </select>
+                        {/* Select huisjes */}
+                        <select name="Huisjes" id="huisjes" className="select">
+                            <option value="Huisje1">Huisje1</option>
+                            <option value="Huisje2">Huisje2</option>
+                            <option value="Huisje3">Huisje3</option>
+                            <option value="Huisje4">Huisje4</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="row">
+                    {/* temp */}
+                    <div className="col-md-4">
+                        <div className="wr-diagram diagram-temperature">
+                            <h2>Temperatuur</h2>
+                            <span className="wr-temperature"><span id="temperature">{state.temperature.datasets[0].data[0] || 0}</span><sup>C</sup></span>
+                            <div className="wr-slider">
+                                <div className="scale">
+                                    <span>-10</span><span>40</span>
+                                </div>
+                                <input readOnly type="range" min="0" max="40" step="0.1" value={state.temperature.datasets[0].data[0] || 0} className="slider" id="myRange" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pressure */}
+                    <div className="col-md-4">
+                        <div className="wr-diagram">
+                            <h2>Druk</h2>
+                            <span className="wr-pressure">{state.pressure.datasets[0].data[0]}<span>Bar</span></span>
+                            <div className="wr-slider">
+                                <div className="scale">
+                                    <span>0.5</span><span>1.5</span>
+                                </div>
+                                <input readOnly type="range" min="0.5" max="1.5" step="0.1" value={state.pressure.datasets[0].data[0] || 0} className="slider" id="myRange" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* CO2 */}
+                    <div className="col-md-4">
+                        <div className="wr-diagram">
+                            <h2>Co2</h2>
+                            <span className="wr-CO2">{state.CO2.datasets[0].data[0]}<span>PPM</span></span>
+                            <div className="wr-slider">
+                                <div className="scale">
+                                    <span>0K</span><span>2K</span>
+                                </div>
+                                <input readOnly type="range" min="0" max="2000" step="0.1" value={500} className="slider" id="myRange" />
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <Line className="temperature" data={state} />
-            <button onClick={click}>
-                Click me!
-            </button>
-        </div>
-    )
-};
 
-function getData(setState) {
-    // Empty the arrays
-    data.airPressure = [];
-    data.CO2 = [];
-    data.weight = [];
-    data.humidity = [];
-    data.presences = [];
-    data.temperature = [];
-
-
-    // Get the data from the API
-    fetch('http://avans.duckdns.org:1880/sensor?limit=10')
-        .then(
-            response => response.json()
-        )
-        .then(result => {
-
-            // Set the new data in the arrays
-            result.forEach(r => {
-                data.airPressure.push(r.decoded_payload.luminosity_3 / 100);
-                data.CO2.push(r.decoded_payload.luminosity_5 * 10);
-                data.weight.push(r.decoded_payload.luminosity_6 / 10);
-                data.humidity.push(r.decoded_payload.relative_humidity_1)
-                data.presences.push(r.decoded_payload.relative_humidity_4);
-                data.temperature.push({ key: r.time, value: r.decoded_payload.temperature_2 / 10 });
-            });
-
-            // Set in temperature diagram
-            // Transform the data
-            let labels = [];
-            let values = [];
-
-            data.temperature.forEach(element => {
-                console.log(element);
-
-                // Key (time)
-                let newDate = new Date(element.key);
-                console.log(newDate);
-                labels.push(newDate.getMonth() + " " + newDate.getDate());
-
-                // Value
-                values.push(element.value);
-            });
-
-            setState({
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Temperatuur",
-                        backgroundColor: "rgb(1, 1, 132)",
-                        borderColor: "rgb(255, 99, 132)",
-                        data: [100, 10, 5, 25, 23, 50, 55],
-                    },
-                ],
-            });
-        }
-        );
-    console.log(data);
+            <div className="container">
+                <div className="row">
+                    {/* Temp line chart */}
+                    <div className="col">
+                        <div className="wr-diagram">
+                            <h3>Temperatuur</h3>
+                            <Line className="temperature" data={state.temperature} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }
 
-export default Dashboard
+export default Dashboard;
