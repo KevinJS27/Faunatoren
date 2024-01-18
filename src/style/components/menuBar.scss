@@ -7,7 +7,7 @@
 .menu {
     display: flex;
     list-style-type: none;
-    padding-left: 0;
+    padding: .5rem 0;
     margin: 0;
 
     li {
@@ -34,6 +34,31 @@
                 height: 25px;
                 aspect-ratio: 1/1;
             }
+        }
+
+        &#user {
+            position: relative;
+
+            > .userMenu {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                right: 0;
+                padding: 1rem;
+                background-color: #1C5628;
+                box-shadow: 0 0 15px 0 black;
+
+                img {
+                    margin-right: 0.75rem;
+                    max-height: 75px;
+                    aspect-ratio: 1 / 1;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        &#user[data-open="false"] > .userMenu {
+            display: none;
         }
     }
 
