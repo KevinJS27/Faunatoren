@@ -1,5 +1,6 @@
 // Huisjes.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import torenDAL from "./../DAL/torensDAL.js";
 import './../style/components/basicForm.scss';
 import './../style/components/huisjes.scss';
 import './../style/components/dialog.scss';
@@ -12,11 +13,26 @@ const Huisjes = () => {
 
   const [editHuisje, setEditHuisje] = useState(null);
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
+  const [torens, setTorens] = useState();
 
   const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteHuisjeNaam, setDeleteHuisjeNaam] = useState(null);
+
+  useEffect(() => {
+    const fetchTorens = async () => {
+      // Use the Read function from huisjeDAL
+      const torensDALInstance = new torenDAL();
+
+      // Use the functions from the HuisjesDAL component
+      const TorensData = await torensDALInstance.readData();
+      setTorens(TorensData);
+    };
+
+    fetchTorens();
+  }, []); // Empty dependency array to run only on mount
+
 
   const handleToevoegen = () => {
     if (nieuwHuisje.toren === '') {
@@ -94,6 +110,7 @@ const Huisjes = () => {
               <div className='wr-inputs'>
                 <div>
                   <label>Toren:</label>
+                  {console.log(torens)}
                   <select
                     value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
                     onChange={e => (editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value }))}
