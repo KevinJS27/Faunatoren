@@ -18,10 +18,19 @@ const Torens = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteTorenId, setDeleteTorenId] = useState(null);
 
-  const handleToevoegen = () => {
-    setTorens([...torens, { id: Date.now(), ...nieuweToren }]);
-    setNieuweToren({ naam: '', locatie: '' });
+  const isNieuweTorenValid = () => {
+    return nieuweToren.naam.trim() !== '' && nieuweToren.locatie.trim() !== '';
   };
+
+  const handleToevoegen = () => {
+    if (isNieuweTorenValid()) {
+      setTorens([...torens, { id: Date.now(), ...nieuweToren }]);
+      setNieuweToren({ naam: '', locatie: ''});
+    } else {
+      alert('Vul alle velden in om een nieuwe toren toe te voegen.');
+    }
+  };
+
 
   const handleBijwerken = () => {
     const updatedTorens = torens.map(toren =>
@@ -81,7 +90,7 @@ const Torens = () => {
                 type="text"
                 value={editToren ? editToren.naam : nieuweToren.naam}
                 onChange={e => (editToren ? setEditToren({ ...editToren, naam: e.target.value }) : setNieuweToren({ ...nieuweToren, naam: e.target.value }))}
-              />f
+              />
               <label>Locatie:</label>
               <input
                 type="text"
