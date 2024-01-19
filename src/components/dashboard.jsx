@@ -1,10 +1,11 @@
-import "./../style/components/dashboard.scss";
+import React, { useState, useEffect } from "react";
 import Chart from 'chart.js/auto'; // https://stackoverflow.com/questions/67727603/error-category-is-not-a-registered-scale
 import { Line } from "react-chartjs-2";
-import React, { useState, useEffect } from "react";
+import huisjeDAL from "./../DAL/huisjesDAL.js";
+import "./../style/components/dashboard.scss";
+
 
 function Dashboard() {
-
     const initialDatasetState = {
         labels: ["Loading..."],
         datasets: [
@@ -16,24 +17,49 @@ function Dashboard() {
         ],
     };
 
-    let [state, setState] = useState({
+    // sensorData
+    const [sensorData, setSensorData] = useState({
         temperature: { ...initialDatasetState },
         CO2: { ...initialDatasetState },
         pressure: { ...initialDatasetState },
     });
 
+    const [huisjes, setHuisjes] = useState();
+    const [torens, setTorens] = useState();
+    const [selectedToren, setSelectedToren] = useState("");
+    const [selectedHuisje, setSelectedHuisje] = useState("");
+
     useEffect(() => {
-        getData();
+        const fetchHuisjes = async () => {
+            // Use the Read function from huisjeDAL
+            const huisjesDALInstance = new huisjeDAL();
+
+            // Use the functions from the HuisjesDAL component
+            const huisjesData = await huisjesDALInstance.readData();
+            setHuisjes(huisjesData);
+        };
+
+        const fetchTorens = async () => {
+            // Use the Read function from huisjeDAL
+            const torensDALInstance = new huisjeDAL();
+
+            // Use the functions from the HuisjesDAL component
+            const TorensData = await torensDALInstance.readData();
+            setTorens(TorensData);
+        };
+
+        fetchHuisjes();
+        fetchTorens();
+        getSensorData();
     }, []); // Empty dependency array to run only on mount
 
     // Fetch data from the API
-    function getData() {
+    function getSensorData() {
         fetch("http://avans.duckdns.org:1880/sensor?limit=20")
             // Change response to JSON
             .then((response) => response.json())
 
             .then((result) => {
-                
                 // Reverse the array so that it makes more sense in the line graph
                 result.reverse();
 
@@ -47,7 +73,7 @@ function Dashboard() {
                     // Change time format
                     const timeString = changeDateFormat(currentItem.time);
                     time.push(timeString);
-    
+
                     // Fill the arrays with data
                     temperatures.push(currentItem.decoded_payload.temperature_2 / 10);
                     pressure.push(currentItem.decoded_payload.luminosity_3 / 100);
@@ -55,9 +81,12 @@ function Dashboard() {
                 });
 
                 // Update the state
-                newUpdateDataset("temperature", "temperatuur", time, temperatures);
-                newUpdateDataset("pressure", "Druk", time, pressure);
-                newUpdateDataset("CO2", "CO2", time, CO2);
+                UpdateSensorDataset("temperature", "temperatuur", time, temperatures);
+                UpdateSensorDataset("pressure", "Druk", time, pressure);
+                UpdateSensorDataset("CO2", "CO2", time, CO2);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
             });
     }
 
@@ -69,8 +98,8 @@ function Dashboard() {
     }
 
     // Update a object in the state
-    function newUpdateDataset(property, label, time, value) {
-        setState((prevState) => ({
+    function UpdateSensorDataset(property, label, time, value) {
+        setSensorData((prevState) => ({
             ...prevState,
             [property]: {
                 ...prevState[property],
@@ -91,21 +120,42 @@ function Dashboard() {
                 <div className="row">
                     <div className="col-12">
                         <h1>Dashboard</h1>
-                        {/* Select torens */}
-                        <select name="Torens" id="torens" className="select">
-                            <option value="toren1">toren</option>
-                            <option value="toren2">toren2</option>
-                            <option value="toren3">toren3</option>
-                            <option value="toren4">toren4</option>
-                        </select>
 
                         {/* Select huisjes */}
-                        <select name="Huisjes" id="huisjes" className="select">
-                            <option value="Huisje1">Huisje1</option>
-                            <option value="Huisje2">Huisje2</option>
-                            <option value="Huisje3">Huisje3</option>
-                            <option value="Huisje4">Huisje4</option>
-                        </select>
+                        {torens && torens.length > 0 && (
+                            <select
+                                name="Torens"
+                                id="torens"
+                                className="select"
+                                value={selectedToren}
+                                onChange={(e) => setSelectedToren(e.target.value)}
+                            >
+                                <option value="">selecteer een Toren</option>
+                                {huisjes.map((huisje, index) => (
+                                    <option key={index} value={huisje.device_id}>
+                                        {huisje.device_id}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+
+                        {/* Select huisjes */}
+                        {huisjes && huisjes.length > 0 && (
+                            <select
+                                name="Huisjes"
+                                id="huisjes"
+                                className="select"
+                                value={selectedHuisje}
+                                onChange={(e) => setSelectedHuisje(e.target.value)}
+                            >
+                                <option value="">selecteer een Huisje</option>
+                                {huisjes.map((huisje, index) => (
+                                    <option key={index} value={huisje.device_id}>
+                                        {huisje.device_id}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
                     </div>
                 </div>
 
@@ -114,12 +164,12 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram diagram-temperature">
                             <h2>Temperatuur</h2>
-                            <span className="wr-temperature"><span id="temperature">{state.temperature.datasets[0].data[0] || 0}</span><sup>C</sup></span>
+                            <span className="wr-temperature"><span id="temperature">{sensorData.temperature.datasets[0].data[0] || 0}</span><sup>C</sup></span>
                             <div className="wr-slider">
                                 <div className="scale">
                                     <span>-10</span><span>40</span>
                                 </div>
-                                <input readOnly type="range" min="0" max="40" step="0.1" value={state.temperature.datasets[0].data[0] || 0} className="slider" id="myRange" />
+                                <input readOnly type="range" min="0" max="40" step="0.1" value={sensorData.temperature.datasets[0].data[0] || 0} className="slider" id="myRange" />
                             </div>
                         </div>
                     </div>
@@ -128,12 +178,12 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram">
                             <h2>Druk</h2>
-                            <span className="wr-pressure">{state.pressure.datasets[0].data[0]}<span>Bar</span></span>
+                            <span className="wr-pressure">{sensorData.pressure.datasets[0].data[0]}<span>Bar</span></span>
                             <div className="wr-slider">
                                 <div className="scale">
                                     <span>0.5</span><span>1.5</span>
                                 </div>
-                                <input readOnly type="range" min="0.5" max="1.5" step="0.1" value={state.pressure.datasets[0].data[0] || 0} className="slider" id="myRange" />
+                                <input readOnly type="range" min="0.5" max="1.5" step="0.1" value={sensorData.pressure.datasets[0].data[0] || 0} className="slider" id="myRange" />
                             </div>
                         </div>
                     </div>
@@ -142,12 +192,12 @@ function Dashboard() {
                     <div className="col-md-4">
                         <div className="wr-diagram">
                             <h2>Co2</h2>
-                            <span className="wr-CO2">{state.CO2.datasets[0].data[0]}<span>PPM</span></span>
+                            <span className="wr-CO2">{sensorData.CO2.datasets[0].data[0]}<span>PPM</span></span>
                             <div className="wr-slider">
                                 <div className="scale">
                                     <span>0K</span><span>2K</span>
                                 </div>
-                                <input readOnly type="range" min="0" max="2000" step="0.1" value={state.CO2.datasets[0].data[0] || 0} className="slider" id="myRange" />
+                                <input readOnly type="range" min="0" max="2000" step="0.1" value={sensorData.CO2.datasets[0].data[0] || 0} className="slider" id="myRange" />
                             </div>
                         </div>
                     </div>
@@ -161,7 +211,7 @@ function Dashboard() {
                     <div className="col">
                         <div className="wr-diagram">
                             <h3>Temperatuur</h3>
-                            <Line className="temperature" data={state.temperature} />
+                            <Line className="temperature" data={sensorData.temperature} />
                         </div>
                     </div>
                 </div>
