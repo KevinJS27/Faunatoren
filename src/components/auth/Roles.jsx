@@ -3,7 +3,7 @@ import UserRolesComponent from './UserRolesComponent';
 import Profile from './profile';
 
 const Roles = () => {
-  const userIdToCheck = Profile.userIdToCheck;
+  const userIdToCheck = "google-oauth2|105279969498319760361";
 
   return (
     <div>
