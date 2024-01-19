@@ -1,7 +1,9 @@
 import './../style/grid/_index.scss';
 import './../style/components/menuBar.scss';
-import faunaTorenLogo from './../assets/faunatoren_logo.png';
-import userIcon from './../assets/userIcon.svg';
+import faunaTorenLogo from './../assets/icons/faunatorenLogo.png';
+import userIcon from './../assets/icons/userIcon.svg';
+import noUserIcon from './../assets/icons/noUserIcon.png';
+import { useState } from 'react';
 
 function MenuBar({ onMenuItemClick, user }) {
     const handleMenuItemClick = (menuItem) => {
