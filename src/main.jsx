@@ -6,6 +6,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import LoginButton from './components/auth/loginBtn';
 import LogoutButton from './components/auth/logoutBtn';
 import Profile from './components/auth/profile';
+import Roles from './components/auth/Roles';
 
 // components
 import MenuBar from './components/menuBar';
@@ -65,6 +66,7 @@ function App() {
             <LoginButton />
             <LogoutButton />
             <Profile user={setUser}/>
+            <Roles />
           </div>
         </div>
       </div>
