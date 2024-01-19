@@ -6,6 +6,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import LoginButton from './components/auth/loginBtn';
 import LogoutButton from './components/auth/logoutBtn';
 import Profile from './components/auth/profile';
+import Roles from './components/auth/Roles';
 
 // components
 import MenuBar from './components/menuBar';
@@ -20,8 +21,7 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root')).render(<App/>);
 
 function App() {
-  // State for the homepage
-  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
   const [user,setUser] = useState({name:"test",email:"email"}); 
@@ -59,6 +59,7 @@ function App() {
       {selectedMenu === 'huisjes' && <DashboardHuisjes />}
 
 
+      <hr />
       {/* Login buttons*/}
       <div className="container">
         <div className="row">
@@ -66,6 +67,7 @@ function App() {
             <LoginButton />
             <LogoutButton />
             <Profile user={setUser}/>
+            <Roles />
           </div>
         </div>
       </div>

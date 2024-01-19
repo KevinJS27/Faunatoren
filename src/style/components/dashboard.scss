@@ -1,12 +1,5 @@
-.select {
-    padding: 10px 20px 10px 15px;
-    border: none;
-    font-size: 1.1em;
-
-    &:last-child {
-        border-radius: 3px;
-        margin: 15px;
-    }
+.select:last-child {
+    margin-left: 15px;
 }
 
 .wr-diagram {
@@ -43,10 +36,10 @@
                     border: solid black 1px;
                     border-radius: 50%;
                 }
-            } 
+            }
 
             // Make the text smaller next the the numbers
-            &:not(.wr-temperature) span{
+            &:not(.wr-temperature) span {
                 font-size: 1.5rem;
             }
         }
@@ -59,7 +52,7 @@
     -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox)
  */
 .wr-slider {
-    .scale{
+    .scale {
         display: flex;
         justify-content: space-between;
     }

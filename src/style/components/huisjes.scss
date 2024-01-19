@@ -1,10 +1,5 @@
 // Huisjes.scss
 .huisjes-container {
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
   .huisjes-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -21,70 +16,7 @@
     text-align: center;
 
     button {
-      margin-top: 8px;
+      margin: 8px 15px 0;
     }
   }
-
-  .huisje-form {
-    margin-top: 20px;
-    width: 100%;
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    input {
-      width: 100%;
-      margin-bottom: 16px;
-      padding: 8px;
-    }
-
-    button {
-      padding: 10px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  }
-
-}
-
-dialog {
-  position: fixed;
-  top: 50%;
-  padding: 16px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  &::backdrop {
-    background-color: black;
-  }
-  
-
-  p {
-    margin-bottom: 16px;
-  }
-
-  button {
-    padding: 8px 16px;
-    margin-right: 8px;
-    cursor: pointer;
-    border: none;
-    background-color: #4caf50;
-    color: white;
-  }
-}
-.dialog-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
 }
