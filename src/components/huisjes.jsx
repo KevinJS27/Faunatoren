@@ -11,12 +11,20 @@ const Huisjes = () => {
   const [editHuisje, setEditHuisje] = useState(null);
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
 
+  const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
+
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteHuisjeId, setDeleteHuisjeId] = useState(null);
 
   const handleToevoegen = () => {
+    if (nieuwHuisje.toren === '') {
+      alert('Selecteer eerst een toren!');
+      return;
+    }
+
     setHuisjes([...huisjes, { id: Date.now(), ...nieuwHuisje }]);
-    setNieuwHuisje({ toren: '', naam: '' });
+    setNieuwHuisje({ toren: '', locatie: '', aantal: 0 });
   };
 
   const handleBijwerken = () => {
@@ -76,9 +84,10 @@ const Huisjes = () => {
                 value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
                 onChange={e => (editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value }))}
               >
-                {beschikbareTorens.map(toren => (
-                  <option key={toren.id} value={toren.naam}>
-                    {toren.naam}
+                <option value="" disabled>Selecteer een toren</option>
+                {torenOpties.map(optie => (
+                  <option key={optie} value={optie}>
+                    {optie}
                   </option>
                 ))}
               </select>
@@ -96,7 +105,7 @@ const Huisjes = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       {showDeleteDialog && (
         <>
           <div className="dialog-backdrop" />
@@ -106,7 +115,8 @@ const Huisjes = () => {
             <button onClick={handleCancelVerwijderen}>Nee</button>
           </dialog>
         </>
-      )};
+      )
+      };
 
     </>
   );

@@ -13,6 +13,9 @@ const Torens = () => {
   const [editToren, setEditToren] = useState(null);
   const [nieuweToren, setNieuweToren] = useState({ naam: '', huisjes: 0, locatie: '' });
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteTorenId, setDeleteTorenId] = useState(null);
+
   const handleToevoegen = () => {
     setTorens([...torens, { id: Date.now(), ...nieuweToren }]);
     setNieuweToren({ naam: '', huisjes: 0, locatie: '' });
@@ -27,11 +30,24 @@ const Torens = () => {
   };
 
   const handleVerwijderen = id => {
-    const filteredTorens = torens.filter(toren => toren.id !== id);
-    setTorens(filteredTorens);
+    setDeleteTorenId(id);
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmVerwijderen = () => {
+    const gefilterdeTorens = torens.filter(toren => toren.id !== deleteTorenId);
+    setTorens(gefilterdeTorens);
+    setShowDeleteDialog(false);
+    setDeleteTorenId(null);
+  };
+
+  const handleCancelVerwijderen = () => {
+    setShowDeleteDialog(false);
+    setDeleteTorenId(null);
   };
 
   return (
+    <>
     <div className="container torens-container">
       <div className="row">
 
@@ -85,8 +101,21 @@ const Torens = () => {
         </div>
       </div>
     </div>
-  );
+    {showDeleteDialog && (
+      <>
+        <div className="dialog-backdrop" />
+        <dialog open={showDeleteDialog}>
+          <p>Weet je zeker dat je deze toren wilt verwijderen?</p>
+          <button onClick={handleConfirmVerwijderen}>Ja</button>
+          <button onClick={handleCancelVerwijderen}>Nee</button>
+        </dialog>
+      </>
+    )
+    };
+  </>
+);
 };
+
 
 export default Torens;
 
