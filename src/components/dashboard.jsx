@@ -147,7 +147,7 @@ function Dashboard() {
                                 <div className="scale">
                                     <span>0K</span><span>2K</span>
                                 </div>
-                                <input readOnly type="range" min="0" max="2000" step="0.1" value={500} className="slider" id="myRange" />
+                                <input readOnly type="range" min="0" max="2000" step="0.1" value={state.CO2.datasets[0].data[0] || 0} className="slider" id="myRange" />
                             </div>
                         </div>
                     </div>

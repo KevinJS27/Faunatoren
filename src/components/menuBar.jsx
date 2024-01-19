@@ -41,7 +41,9 @@ function MenuBar({ onMenuItemClick, user }) {
                 </div>
             </div>
         </div>
-    );
-}
+    )
+    }
 
-export default MenuBar;
+
+
+export default MenuBar
