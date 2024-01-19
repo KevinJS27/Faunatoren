@@ -1,6 +1,8 @@
 // torens.jsx
 import React, { useState } from 'react';
+import './../style/components/basicForm.scss';
 import './../style/components/torens.scss';
+import './../style/components/dialog.scss';
 
 const Torens = () => {
   const [torens, setTorens] = useState([
@@ -56,7 +58,7 @@ const Torens = () => {
       {/* Toren toevoegen */}
       <div className="row">
         <div className="col-12">
-          <div className="toren-form">
+          <div className="form toren-form">
             <h2>{editToren ? 'Toren bijwerken' : 'Toren toevoegen'}</h2>
             <label>Naam:</label>
             <input

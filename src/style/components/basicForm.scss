@@ -1,0 +1,25 @@
+.form {
+    margin-top: 20px;
+    width: 100%;
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .wr-inputs {
+        display: flex;
+
+        div:first-child {
+            margin-right: 2rem;
+        }
+    }
+
+    input {
+        width: 100%;
+    }
+
+    button {
+        margin-top: 20px;
+    }
+}
