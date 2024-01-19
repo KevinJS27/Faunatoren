@@ -59,6 +59,7 @@ function App() {
       {selectedMenu === 'huisjes' && <DashboardHuisjes />}
 
 
+      <hr />
       {/* Login buttons*/}
       <div className="container">
         <div className="row">
