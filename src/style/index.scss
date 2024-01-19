@@ -24,6 +24,19 @@ button {
   border: none;
 }
 
+input,select {
+  margin-bottom: 16px;
+  padding: 10px 20px 10px 15px;
+  border: none;
+  font-size: 1.1em;
+  background-color: #D9D9D9;
+  border-radius: 3px;
+
+  &:focus-visible {
+      outline-color: black;
+  }
+}
+
 button:hover {
   background-color: #7a7a7a;
   cursor: pointer;

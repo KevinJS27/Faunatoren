@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './../style/components/basicForm.scss';
 import './../style/components/huisjes.scss';
+import './../style/components/dialog.scss';
 
 const Huisjes = () => {
   const [huisjes, setHuisjes] = useState([
@@ -104,7 +105,12 @@ const Huisjes = () => {
         <>
           <div className="dialog-backdrop" />
           <dialog open={showDeleteDialog}>
-            <p>Weet je zeker dat je dit huisje wilt verwijderen?</p>
+            {console.log(huisjes)}
+            {console.log(deleteHuisjeId)}
+            <h2>U staat op het punt om {"HUISJENAAM"} te verwijderen</h2>
+            <p>Voer de naam van het huisje in om het te verwijderen.
+              Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
+            <input className="select" type="text" name="huisje" id="" /><br />
             <button onClick={handleConfirmVerwijderen}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
           </dialog>

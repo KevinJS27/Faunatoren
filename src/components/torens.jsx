@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './../style/components/basicForm.scss';
 import './../style/components/torens.scss';
+import './../style/components/dialog.scss';
 
 const Torens = () => {
   const [torens, setTorens] = useState([
