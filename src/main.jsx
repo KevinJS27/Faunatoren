@@ -14,6 +14,7 @@ import Dashboard from './components/dashboard';
 import DashboardToren from './components/torens';
 import DashboardHuisjes from './components/huisjes';
 import LogsComponent from './components/logs';
+import LogsComponent from './components/logs';
 
 // css
 import './style/index.scss';
