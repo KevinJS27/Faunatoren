@@ -11,6 +11,7 @@ import Profile from './components/auth/profile';
 import MenuBar from './components/menuBar';
 import Dashboard from './components/dashboard';
 import DashboardToren from './components/torens';
+import DashboardHuisjes from './components/huisjes';
 
 // css
 import './style/index.scss';
@@ -19,8 +20,7 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root')).render(<App/>);
 
 function App() {
-  // State for the homepage
-  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
   const [user,setUser] = useState({name:"test",email:"email"}); 
@@ -55,6 +55,8 @@ function App() {
       {/* Conditionally render components based on selected menu item */}
       {selectedMenu === 'dashboard' && <Dashboard />}
       {selectedMenu === 'torens' && <DashboardToren />}
+      {selectedMenu === 'huisjes' && <DashboardHuisjes />}
+
 
       {/* Login buttons*/}
       <div className="container">
