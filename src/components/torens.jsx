@@ -6,21 +6,21 @@ import './../style/components/dialog.scss';
 
 const Torens = () => {
   const [torens, setTorens] = useState([
-    { id: 1, naam: 'Toren 1', huisjes: 5, locatie: 'Amsterdam' },
-    { id: 2, naam: 'Toren 2', huisjes: 8, locatie: 'Utrecht' },
-    { id: 3, naam: 'Toren 3', huisjes: 6, locatie: 'Den Bosch' },
-    { id: 4, naam: 'Toren 4', huisjes: 7, locatie: 'Den Bosch' },
+    { id: 1, naam: 'Toren 1', locatie: 'Amsterdam' },
+    { id: 2, naam: 'Toren 2', locatie: 'Utrecht' },
+    { id: 3, naam: 'Toren 3', locatie: 'Den Bosch' },
+    { id: 4, naam: 'Toren 4', locatie: 'Den Bosch' },
   ]);
 
   const [editToren, setEditToren] = useState(null);
-  const [nieuweToren, setNieuweToren] = useState({ naam: '', huisjes: 0, locatie: '' });
+  const [nieuweToren, setNieuweToren] = useState({ naam: '', locatie: '' });
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteTorenId, setDeleteTorenId] = useState(null);
 
   const handleToevoegen = () => {
     setTorens([...torens, { id: Date.now(), ...nieuweToren }]);
-    setNieuweToren({ naam: '', huisjes: 0, locatie: '' });
+    setNieuweToren({ naam: '', locatie: '' });
   };
 
   const handleBijwerken = () => {
@@ -34,7 +34,7 @@ const Torens = () => {
   const handleVerwijderen = id => {
     setDeleteTorenId(id);
     setShowDeleteDialog(true);
-    setDeleteTorenId(toren);
+    setDeleteTorenId(null);
   };
 
   const handleConfirmVerwijderen = () => {
@@ -61,7 +61,6 @@ const Torens = () => {
               {torens.map(toren => (
                 <div key={toren.id} className="toren-item">
                   <span><b>{toren.naam}</b></span>
-                  <span>{toren.huisjes} huisjes</span>
                   <span>{toren.locatie}</span>
                   <button onClick={() => setEditToren(toren)}>Bewerken</button>
                   <button onClick={() => handleVerwijderen(toren.id)}>Verwijderen</button>
@@ -82,13 +81,7 @@ const Torens = () => {
                 type="text"
                 value={editToren ? editToren.naam : nieuweToren.naam}
                 onChange={e => (editToren ? setEditToren({ ...editToren, naam: e.target.value }) : setNieuweToren({ ...nieuweToren, naam: e.target.value }))}
-              />
-              <label>Aantal Huisjes:</label>
-              <input
-                type="number"
-                value={editToren ? editToren.huisjes : nieuweToren.huisjes}
-                onChange={e => (editToren ? setEditToren({ ...editToren, huisjes: parseInt(e.target.value) }) : setNieuweToren({ ...nieuweToren, huisjes: parseInt(e.target.value) }))}
-              />
+              />f
               <label>Locatie:</label>
               <input
                 type="text"
