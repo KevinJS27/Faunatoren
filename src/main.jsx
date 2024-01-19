@@ -20,8 +20,7 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root')).render(<App/>);
 
 function App() {
-  // State for the homepage
-  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
   const [user,setUser] = useState({name:"test",email:"email"}); 
