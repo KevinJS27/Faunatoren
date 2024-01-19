@@ -11,6 +11,7 @@ import Profile from './components/auth/profile';
 import MenuBar from './components/menuBar';
 import Dashboard from './components/dashboard';
 import DashboardToren from './components/torens';
+import DashboardHuisjes from './components/huisjes';
 
 // css
 import './style/index.scss';
@@ -54,6 +55,8 @@ function App() {
       {/* Conditionally render components based on selected menu item */}
       {selectedMenu === 'dashboard' && <Dashboard />}
       {selectedMenu === 'torens' && <DashboardToren />}
+      {selectedMenu === 'huisjes' && <DashboardHuisjes />}
+
 
       {/* Login buttons*/}
       <div className="container">
