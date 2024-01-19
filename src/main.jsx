@@ -13,6 +13,7 @@ import MenuBar from './components/menuBar';
 import Dashboard from './components/dashboard';
 import DashboardToren from './components/torens';
 import DashboardHuisjes from './components/huisjes';
+import LogsComponent from './components/logs';
 
 // css
 import './style/index.scss';
@@ -58,6 +59,7 @@ function App() {
       {selectedMenu === 'dashboard' && <Dashboard />}
       {selectedMenu === 'torens' && <DashboardToren />}
       {selectedMenu === 'huisjes' && <DashboardHuisjes />}
+      {selectedMenu === 'logs' && <LogsComponent />}
 
       <hr />
       {/* Login buttons*/}
