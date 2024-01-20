@@ -14,6 +14,10 @@ const Roles = (user) => {
       })
   }, []);
 
+  const handleClick = () =>{
+    console.log(user);
+  };
+
   return (
     <div>
       <h1>React App met Auth0 User Roles</h1>
@@ -26,6 +30,9 @@ const Roles = (user) => {
           </tr>
         ))}
       </table>
+      <button onClick={handleClick}>
+        Click me
+      </button>
       <pre>{JSON.stringify(Roles, null, 2)}</pre>
     </div>
   )
