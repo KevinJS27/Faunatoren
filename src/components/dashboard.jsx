@@ -25,21 +25,36 @@ function Dashboard() {
         pressure: { ...initialDatasetState },
     });
 
+    // Current huisjes/torens for in the select boxes
     const [huisjes, setHuisjes] = useState();
     const [torens, setTorens] = useState();
+
+    // Selected items in the select boxes
     const [selectedToren, setSelectedToren] = useState("");
     const [selectedHuisje, setSelectedHuisje] = useState("");
 
+    // Onchange event huisje Select
+    function onHuisjeChange(currentHuisje) {
+        setSelectedHuisje(currentHuisje)
+        const huisjesDALInstance = new huisjeDAL();
+        huisjesDALInstance.readSingleHuisje(currentHuisje)
+            .then(result => {
+                transformData(result);
+            });
+    }
+
+    // Onchange event torens Select
+    function onTorenChange(currentToren) {
+        setSelectedToren(currentToren);
+
+        const huisjesDALInstance = new huisjeDAL();
+        huisjesDALInstance.readHuisjesPerToren(currentToren)
+            .then(result => {
+                setHuisjes(result);
+            });
+    }
+
     useEffect(() => {
-        const fetchHuisjes = async () => {
-            // Use the Read function from huisjeDAL
-            const huisjesDALInstance = new huisjeDAL();
-
-            // Use the functions from the HuisjesDAL component
-            const huisjesData = await huisjesDALInstance.readData();
-            setHuisjes(huisjesData);
-        };
-
         const fetchTorens = async () => {
             // Use the Read function from huisjeDAL
             const torensDALInstance = new torensDAL();
@@ -47,49 +62,37 @@ function Dashboard() {
             // Use the functions from the HuisjesDAL component
             const TorensData = await torensDALInstance.readData();
             setTorens(TorensData);
-            console.log(TorensData)
         };
 
-        fetchHuisjes();
         fetchTorens();
-        getSensorData();
     }, []); // Empty dependency array to run only on mount
 
-    // Fetch data from the API
-    function getSensorData() {
-        fetch("https://avans.duckdns.org:1880/sensor?limit=20")
-            // Change response to JSON
-            .then((response) => response.json())
+    // Helper function to transform data
+    function transformData(result) {
+        // Reverse the array so that it makes more sense in the line graph
+        result.reverse();
 
-            .then((result) => {
-                // Reverse the array so that it makes more sense in the line graph
-                result.reverse();
+        // Create empty arrays
+        let time = [];
+        let temperatures = [];
+        let pressure = [];
+        let CO2 = [];
 
-                // Create empty arrays
-                let time = [];
-                let temperatures = [];
-                let pressure = [];
-                let CO2 = [];
+        result.forEach((currentItem) => {
+            // Change time format
+            const timeString = changeDateFormat(currentItem.time);
+            time.push(timeString);
 
-                result.forEach((currentItem) => {
-                    // Change time format
-                    const timeString = changeDateFormat(currentItem.time);
-                    time.push(timeString);
+            // Fill the arrays with data
+            temperatures.push(currentItem.decoded_payload.temperature_2 / 10);
+            pressure.push(currentItem.decoded_payload.luminosity_3 / 100);
+            CO2.push(currentItem.decoded_payload.luminosity_5 * 10);
+        });
 
-                    // Fill the arrays with data
-                    temperatures.push(currentItem.decoded_payload.temperature_2 / 10);
-                    pressure.push(currentItem.decoded_payload.luminosity_3 / 100);
-                    CO2.push(currentItem.decoded_payload.luminosity_5 * 10);
-                });
-
-                // Update the state
-                UpdateSensorDataset("temperature", "temperatuur", time, temperatures);
-                UpdateSensorDataset("pressure", "Druk", time, pressure);
-                UpdateSensorDataset("CO2", "CO2", time, CO2);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
+        // Update the state
+        UpdateSensorDataset("temperature", "temperatuur", time, temperatures);
+        UpdateSensorDataset("pressure", "Druk", time, pressure);
+        UpdateSensorDataset("CO2", "CO2", time, CO2);
     }
 
     // Changes date format
@@ -123,19 +126,19 @@ function Dashboard() {
                     <div className="col-12">
                         <h1>Dashboard</h1>
 
-                        {/* Select huisjes */}
+                        {/* Select Toren */}
                         {torens && torens.length > 0 && (
                             <select
                                 name="Torens"
                                 id="torens"
                                 className="select"
                                 value={selectedToren}
-                                onChange={(e) => setSelectedToren(e.target.value)}
+                                onChange={(e) => onTorenChange(e.target.value)}
                             >
                                 <option value="">selecteer een Toren</option>
-                                {huisjes.map((huisje, index) => (
-                                    <option key={index} value={huisje.device_id}>
-                                        {huisje.device_id}
+                                {torens.map((toren, index) => (
+                                    <option key={index} value={toren.torenNaam}>
+                                        {toren.torenNaam}
                                     </option>
                                 ))}
                             </select>
@@ -148,7 +151,7 @@ function Dashboard() {
                                 id="huisjes"
                                 className="select"
                                 value={selectedHuisje}
-                                onChange={(e) => setSelectedHuisje(e.target.value)}
+                                onChange={(e) => onHuisjeChange(e.target.value)}
                             >
                                 <option value="">selecteer een Huisje</option>
                                 {huisjes.map((huisje, index) => (
@@ -207,9 +210,9 @@ function Dashboard() {
                 </div>
             </div>
 
+            {/* Temperature line chart */}
             <div className="container">
                 <div className="row">
-                    {/* Temp line chart */}
                     <div className="col">
                         <div className="wr-diagram">
                             <h3>Temperatuur</h3>
