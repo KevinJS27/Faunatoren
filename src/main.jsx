@@ -66,12 +66,17 @@ function App() {
     <Auth0Provider
       domain="kjschollen.eu.auth0.com"
       clientId="cernTRpK8SxCXwI69sA594JLHc6FlrU4"
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        //   // audience: "https://localhost:3000/",
+        //   // scope: "read:current_user update:current_user_metadata"
+      }}
     >
       {/* Menu */}
       <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />
 
       {/* Conditionally render components based on selected menu item */}
-      {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br/><LoginButton /></div></div></div>}
+      {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
 
       <hr />
       {/* Login buttons*/}
