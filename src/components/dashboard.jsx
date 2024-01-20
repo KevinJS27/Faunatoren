@@ -36,7 +36,7 @@ function Dashboard() {
     // Onchange event huisje Select
     function onHuisjeChange(currentHuisje) {
         setSelectedHuisje(currentHuisje)
-        
+
         const huisjesDALInstance = new huisjeDAL();
         huisjesDALInstance.readSingleHuisje(currentHuisje)
             .then(result => {
@@ -129,7 +129,6 @@ function Dashboard() {
                         <p>Selecteer een toren en huisje waar je de gegevens van wilt.</p>
                         {/* Select Toren */}
                         {torens && torens.length > 0 ? (
-                        {torens && torens.length > 0 ? (
                             <select
                                 name="Torens"
                                 id="torens"
@@ -146,12 +145,9 @@ function Dashboard() {
                             </select>
                         ) : (
                             <p>Er was een probleem met het inladen van de torens</p>
-                        ) : (
-                            <p>Er was een probleem met het inladen van de torens</p>
                         )}
 
                         {/* Select huisjes */}
-                        {huisjes && huisjes.length > 0 ? (
                         {huisjes && huisjes.length > 0 ? (
                             <select
                                 name="Huisjes"
@@ -167,8 +163,6 @@ function Dashboard() {
                                     </option>
                                 ))}
                             </select>
-                        ) : (
-                            <p>Er was een probleem met het inladen van de huisjes.</p>
                         ) : (
                             <p>Er was een probleem met het inladen van de huisjes.</p>
                         )}
