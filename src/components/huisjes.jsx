@@ -23,9 +23,11 @@ const Huisjes = () => {
       // Use the Read function from huisjeDAL
       const torensDALInstance = new torensDAL();
 
-      // Use the functions from the HuisjesDAL component
-      const TorensData = await torensDALInstance.readData();
-      setTorens(TorensData);
+      // Use the functions from the torensDAL class
+      torensDALInstance.readData()
+        .then(result => {
+          setTorens(result);
+        });
     };
 
     fetchTorens();
