@@ -25,6 +25,7 @@ function MenuBar({ onMenuItemClick, user }) {
                                 <img src={userIcon} className="User" alt="Gebruiker informatie" />
                                 {user ? (
                                     <div className='userMenu'>
+                                    {console.log(user)}
                                         <>
                                             <img src={noUserIcon} alt="profiel foto" />
                                             <div>
