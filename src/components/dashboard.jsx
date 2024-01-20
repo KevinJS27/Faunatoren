@@ -36,7 +36,7 @@ function Dashboard() {
     // Onchange event huisje Select
     function onHuisjeChange(currentHuisje) {
         setSelectedHuisje(currentHuisje)
-        
+
         const huisjesDALInstance = new huisjeDAL();
         huisjesDALInstance.readSingleHuisje(currentHuisje)
             .then(result => {
