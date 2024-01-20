@@ -117,8 +117,11 @@ const Huisjes = () => {
               </div>
 
               {editHuisje ? (
-                <button onClick={handleBijwerken}>Bijwerken</button>
-              ) : (
+                <>
+                  <button onClick={handleBijwerken}>Bijwerken</button>
+                  <button onClick={() => setEditHuisje(null)}>Annuleren</button>
+                </>
+                ) : (
                 <button onClick={handleToevoegen}>Toevoegen</button>
               )}
             </div>

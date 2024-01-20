@@ -108,8 +108,11 @@ const Torens = () => {
                   onChange={e => (editToren ? setEditToren({ ...editToren, locatie: e.target.value }) : setNieuweToren({ ...nieuweToren, locatie: e.target.value }))}
                 />
                 {editToren ? (
-                  <button onClick={handleBijwerken}>Bijwerken</button>
-                ) : (
+                  <>
+                    <button onClick={handleBijwerken}>Bijwerken</button>
+                    <button onClick={() => setEditToren(null)}>Annuleren</button>
+                  </>                
+                  ) : (
                   <button onClick={handleToevoegen}>Toevoegen</button>
                 )}
               </div>
