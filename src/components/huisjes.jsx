@@ -14,9 +14,9 @@ const Huisjes = () => {
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
 
   const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
-  
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteHuisjeId, setDeleteHuisjeId] = useState(null);
+  const [deleteHuisjeNaam, setDeleteHuisjeNaam] = useState(null);
 
   const handleToevoegen = () => {
     if (nieuwHuisje.toren === '') {
@@ -36,21 +36,32 @@ const Huisjes = () => {
     setEditHuisje(null);
   };
 
-  const handleVerwijderen = id => {
-    setDeleteHuisjeId(id);
+  const handleVerwijderen = naam => {
+    setDeleteHuisjeNaam(naam);
     setShowDeleteDialog(true);
   };
 
   const handleConfirmVerwijderen = () => {
-    const gefilterdeHuisjes = huisjes.filter(huis => huis.id !== deleteHuisjeId);
-    setHuisjes(gefilterdeHuisjes);
-    setShowDeleteDialog(false);
-    setDeleteHuisjeId(null);
+
+    const huisjeToDelete = huisjes.find(huis => huis.naam === deleteHuisjeNaam)
+
+    if (huisjeToDelete) {
+      const inputNaam = document.getElementById('huisInput').value.trim();
+
+      if (inputNaam === deleteHuisjeNaam) {
+        const gefilterdeHuisjes = huisjes.filter(huis => huis.naam !== deleteHuisjeNaam);
+        setHuisjes(gefilterdeHuisjes);
+        setShowDeleteDialog(false);
+        setDeleteHuisjeNaam(null);
+      } else {
+        alert('De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw')
+      }
+    }
   };
 
   const handleCancelVerwijderen = () => {
     setShowDeleteDialog(false);
-    setDeleteHuisjeId(null);
+    setDeleteHuisjeNaam(null);
   };
 
   return (
@@ -67,7 +78,7 @@ const Huisjes = () => {
                   <span><b>{huis.toren}</b></span>
                   <span>{huis.naam}</span>
                   <button onClick={() => setEditHuisje(huis)}>Bewerken</button>
-                  <button onClick={() => handleVerwijderen(huis.id)}>Verwijderen</button>
+                  <button onClick={() => handleVerwijderen(huis.naam)}>Verwijderen</button>
                 </div>
               ))}
             </div>
@@ -84,16 +95,16 @@ const Huisjes = () => {
                 <div>
                   <label>Toren:</label>
                   <select
-                value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
-                onChange={e => (editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value }))}
-              >
-                <option value="" disabled>Selecteer een toren</option>
-                {torenOpties.map(optie => (
-                  <option key={optie} value={optie}>
-                    {optie}
-                  </option>
-                ))}
-              </select>
+                    value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
+                    onChange={e => (editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value }))}
+                  >
+                    <option value="" disabled>Selecteer een toren</option>
+                    {torenOpties.map(optie => (
+                      <option key={optie} value={optie}>
+                        {optie}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label>Naam:</label>
@@ -118,12 +129,10 @@ const Huisjes = () => {
         <>
           <div className="dialog-backdrop" />
           <dialog open={showDeleteDialog}>
-            {console.log(huisjes)}
-            {console.log(deleteHuisjeId)}
-            <h2>U staat op het punt om {"HUISJENAAM"} te verwijderen</h2>
+            <h2>U staat op het punt om "{deleteHuisjeNaam}" te verwijderen</h2>
             <p>Voer de naam van het huisje in om het te verwijderen.
               Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
-            <input className="select" type="text" name="huisje" id="" /><br />
+            <input className="select" type="text" name="huisje" id="huisInput" /><br />
             <button onClick={handleConfirmVerwijderen}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
           </dialog>
