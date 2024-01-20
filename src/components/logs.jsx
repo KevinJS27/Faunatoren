@@ -6,14 +6,14 @@ const LogsComponent = () => {
     const [logs, setLogs] = useState([]);
 
     useEffect(() => {
-        fetch("http://avans.duckdns.org:1880/auth0-logs?limit=10")
+        fetch("https://avans.duckdns.org:1880/auth0-logs?limit=10")
             .then((response) => response.json())
             .then((result) => {
                 console.log(result);
                 setLogs(result);
             })
 
-        fetch("http://avans.duckdns.org:1880/log?limit=10")
+        fetch("https://avans.duckdns.org:1880/log?limit=10")
             .then((response) => response.json())
             .then((result) => {
                 console.log(result);
