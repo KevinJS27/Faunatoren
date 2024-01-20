@@ -2,7 +2,7 @@ class huisjesDAL {
 
   // Read
   readData = async () => {
-    const response = await fetch("http://avans.duckdns.org:1880/uids"); // Place holder URL to get huisjes needs to be replaced with URL to torens
+    const response = await fetch("https://avans.duckdns.org:1880/uids");
     const result = await response.json();
     return result;
   };
