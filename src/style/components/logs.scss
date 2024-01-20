@@ -1,0 +1,16 @@
+.logsTable {
+    max-width: 100%;
+
+    &.MBD {
+        td {
+            width: 25%;
+        }
+    }
+
+    &.AUTH0 {
+        td {
+            width: calc(100% / 7);
+            word-break: break-all;
+        }
+    }
+}
