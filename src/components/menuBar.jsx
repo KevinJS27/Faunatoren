@@ -20,10 +20,12 @@ function MenuBar({ onMenuItemClick, user }) {
                             <li onClick={() => handleMenuItemClick('dashboard')}>Dashboard</li>
                             <li onClick={() => handleMenuItemClick('torens')}>Torens</li>
                             <li onClick={() => handleMenuItemClick('huisjes')}>Huisjes</li>
+                            <li onClick={() => handleMenuItemClick('logs')}>Logs</li>
                             <li id="user" onClick={() => handleMenuItemClick('user')} data-open="false">
                                 <img src={userIcon} className="User" alt="Gebruiker informatie" />
                                 {user ? (
                                     <div className='userMenu'>
+                                    {console.log(user)}
                                         <>
                                             <img src={noUserIcon} alt="profiel foto" />
                                             <div>
