@@ -125,7 +125,7 @@ function Dashboard() {
                 <div className="row">
                     <div className="col-12">
                         <h1>Dashboard</h1>
-
+                        <p>Selecteer een toren en huisje waar je de gegevens van wilt.</p>
                         {/* Select Toren */}
                         {torens && torens.length > 0 && (
                             <select
