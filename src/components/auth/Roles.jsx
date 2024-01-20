@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Profile from './profile';
 
-const Roles = () => {
+const Roles = (user) => {
   const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=google-oauth2|105279969498319760361";
-  console.log();
   const [Roles, setRoles] = useState([]);
 
   useEffect(() => {
@@ -14,6 +13,10 @@ const Roles = () => {
         setRoles(result);
       })
   }, []);
+
+  const handleClick = () =>{
+    console.log(user);
+  };
 
   return (
     <div>
@@ -27,6 +30,9 @@ const Roles = () => {
           </tr>
         ))}
       </table>
+      <button onClick={handleClick}>
+        Click me
+      </button>
       <pre>{JSON.stringify(Roles, null, 2)}</pre>
     </div>
   )
