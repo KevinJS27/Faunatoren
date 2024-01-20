@@ -1,14 +1,33 @@
-import React from 'react';
-import UserRolesComponent from './UserRolesComponent';
+import React, { useState, useEffect } from 'react';
 import Profile from './profile';
 
 const Roles = () => {
-  const userIdToCheck = "google-oauth2|105279969498319760361";
+  const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=google-oauth2|105279969498319760361";
+  console.log();
+  const [Roles, setRoles] = useState([]);
+
+  useEffect(() => {
+    fetch(api)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setRoles(result);
+      })
+  }, []);
 
   return (
     <div>
       <h1>React App met Auth0 User Roles</h1>
-      <UserRolesComponent userId={userIdToCheck || 0} />
+      <table>
+        {Roles.map((rol, index) => (
+          <tr>
+            <td>
+              <p key={index}>{rol.name}</p>
+            </td>
+          </tr>
+        ))}
+      </table>
+      <pre>{JSON.stringify(Roles, null, 2)}</pre>
     </div>
   )
 }
