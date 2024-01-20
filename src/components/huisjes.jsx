@@ -93,7 +93,7 @@ const Huisjes = () => {
                 <div key={huis.id} className="huisje-item">
                   <span><b>{huis.toren}</b></span>
                   <span>{huis.naam}</span>
-                  <button onClick={() => setEditHuisje(huis)}>Bewerken</button>
+                  <button onClick={() => setEditHuisje(huis)}>Bijwerken</button>
                   <button onClick={() => handleVerwijderen(huis.naam)}>Verwijderen</button>
                 </div>
               ))}
@@ -106,7 +106,7 @@ const Huisjes = () => {
           {/* Add/Edit */}
           <div className="col-12">
             <div className="form huisje-form">
-              <h2>{editHuisje ? 'Vogelhuisje bewerken' : 'Vogelhuisje toevoegen'}</h2>
+              <h2>{editHuisje ? 'Vogelhuisje bijwerken' : 'Vogelhuisje toevoegen'}</h2>
               <div className='wr-inputs'>
                 <div>
                   <label>Toren:</label>
@@ -134,8 +134,11 @@ const Huisjes = () => {
               </div>
 
               {editHuisje ? (
-                <button onClick={handleBijwerken}>Bijwerken</button>
-              ) : (
+                <>
+                  <button onClick={handleBijwerken}>Bijwerken</button>
+                  <button onClick={() => setEditHuisje(null)}>Annuleren</button>
+                </>
+                ) : (
                 <button onClick={handleToevoegen}>Toevoegen</button>
               )}
             </div>
@@ -147,9 +150,11 @@ const Huisjes = () => {
           <div className="dialog-backdrop" />
           <dialog open={showDeleteDialog}>
             <h2>U staat op het punt om "{deleteHuisjeNaam}" te verwijderen</h2>
+            <h2>U staat op het punt om "{deleteHuisjeNaam}" te verwijderen</h2>
             <p>Voer de naam van het huisje in om het te verwijderen.
               Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
             <input className="select" type="text" name="huisje" id="huisInput" /><br />
+
             <button onClick={handleConfirmVerwijderen}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
           </dialog>

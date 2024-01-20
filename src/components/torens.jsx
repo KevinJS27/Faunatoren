@@ -81,7 +81,7 @@ const Torens = () => {
                   <div key={toren.id} className="toren-item">
                     <span><b>{toren.naam}</b></span>
                     <span>{toren.locatie}</span>
-                    <button onClick={() => setEditToren(toren)}>Bewerken</button>
+                    <button onClick={() => setEditToren(toren)}>Bijwerken</button>
                     <button onClick={() => handleVerwijderen(toren.naam)}>Verwijderen</button>
                   </div>
                 ))}
@@ -108,8 +108,11 @@ const Torens = () => {
                   onChange={e => (editToren ? setEditToren({ ...editToren, locatie: e.target.value }) : setNieuweToren({ ...nieuweToren, locatie: e.target.value }))}
                 />
                 {editToren ? (
-                  <button onClick={handleBijwerken}>Bijwerken</button>
-                ) : (
+                  <>
+                    <button onClick={handleBijwerken}>Bijwerken</button>
+                    <button onClick={() => setEditToren(null)}>Annuleren</button>
+                  </>                
+                  ) : (
                   <button onClick={handleToevoegen}>Toevoegen</button>
                 )}
               </div>
