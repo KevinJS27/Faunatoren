@@ -17,6 +17,7 @@ const Huisjes = () => {
 
   const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
 
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteHuisjeNaam, setDeleteHuisjeNaam] = useState(null);
 
@@ -77,6 +78,7 @@ const Huisjes = () => {
 
   const handleCancelVerwijderen = () => {
     setShowDeleteDialog(false);
+    setDeleteHuisjeNaam(null);
     setDeleteHuisjeNaam(null);
   };
 
@@ -150,8 +152,10 @@ const Huisjes = () => {
           <div className="dialog-backdrop" />
           <dialog open={showDeleteDialog}>
             <h2>U staat op het punt om "{deleteHuisjeNaam}" te verwijderen</h2>
+            <h2>U staat op het punt om "{deleteHuisjeNaam}" te verwijderen</h2>
             <p>Voer de naam van het huisje in om het te verwijderen.
               Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
+            <input className="select" type="text" name="huisje" id="huisInput" /><br />
             <input className="select" type="text" name="huisje" id="huisInput" /><br />
             <button onClick={handleConfirmVerwijderen}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
