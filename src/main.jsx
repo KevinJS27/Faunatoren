@@ -77,7 +77,7 @@ function App() {
 
       {/* Conditionally render components based on selected menu item */}
       {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
-
+      
       <hr />
       {/* Login buttons*/}
       <div className="container">
