@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Profile from './profile';
 
 const Roles = (user) => {
   const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=google-oauth2|105279969498319760361";
-  const [Roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     fetch(api)
@@ -12,6 +11,8 @@ const Roles = (user) => {
         console.log(result);
         setRoles(result);
       })
+      .catch((error) => {
+        console.error('Error:', error);})
   }, []);
 
   const handleClick = () =>{
@@ -21,9 +22,10 @@ const Roles = (user) => {
   return (
     <div>
       <h1>React App met Auth0 User Roles</h1>
-      <table>
-        {Roles.map((rol, index) => (
-          <tr>
+      <table key="not-a-key">
+        {console.log(roles)}
+        {roles.map((rol, index) => (
+          <tr key="not-a-key">
             <td>
               <p key={index}>{rol.name}</p>
             </td>
@@ -33,7 +35,7 @@ const Roles = (user) => {
       <button onClick={handleClick}>
         Click me
       </button>
-      <pre>{JSON.stringify(Roles, null, 2)}</pre>
+      <pre>{JSON.stringify(roles, null, 2)}</pre>
     </div>
   )
 }
