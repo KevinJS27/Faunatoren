@@ -71,8 +71,8 @@ function App() {
           <div className="col-12">
             <LoginButton />
             <LogoutButton />
-            <Profile user={setUser} />
-            <Roles setUserRoles={setUserRoles} />
+            <Profile setUser={setUser} />
+            <Roles user={user} />
           </div>
         </div>
       </div>
