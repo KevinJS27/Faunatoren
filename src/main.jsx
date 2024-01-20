@@ -47,7 +47,7 @@ function App() {
       clientId="cernTRpK8SxCXwI69sA594JLHc6FlrU4"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        // audience: "http://localhost:3000/",
+        // audience: "https://localhost:3000/",
         // scope: "read:current_user update:current_user_metadata"
       }}
     >

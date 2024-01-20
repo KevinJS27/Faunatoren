@@ -6,7 +6,7 @@ const domain = "kjschollen.eu.auth0.com";
 const auth0Client = new auth0.WebAuth({
     domain: 'kjschollen.eu.auth0.com',
     clientID: 'cernTRpK8SxCXwI69sA594JLHc6FlrU4',
-    redirectUri: 'http://localhost:3000',
+    redirectUri: 'https://localhost:3000',
     audience: `https://kjschollen.eu.auth0.com/api/v2/`,
     responseType: 'token id_token',
     scope: 'openid profile email',

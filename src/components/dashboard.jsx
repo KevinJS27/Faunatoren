@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto'; // https://stackoverflow.com/questions/677276
 import { Line } from "react-chartjs-2";
 import huisjeDAL from "./../DAL/huisjesDAL.js";
 import "./../style/components/dashboard.scss";
+import torensDAL from "../DAL/torensDAL.js";
 
 
 function Dashboard() {
@@ -41,11 +42,12 @@ function Dashboard() {
 
         const fetchTorens = async () => {
             // Use the Read function from huisjeDAL
-            const torensDALInstance = new huisjeDAL();
+            const torensDALInstance = new torensDAL();
 
             // Use the functions from the HuisjesDAL component
             const TorensData = await torensDALInstance.readData();
             setTorens(TorensData);
+            console.log(TorensData)
         };
 
         fetchHuisjes();
@@ -55,7 +57,7 @@ function Dashboard() {
 
     // Fetch data from the API
     function getSensorData() {
-        fetch("http://avans.duckdns.org:1880/sensor?limit=20")
+        fetch("https://avans.duckdns.org:1880/sensor?limit=20")
             // Change response to JSON
             .then((response) => response.json())
 
