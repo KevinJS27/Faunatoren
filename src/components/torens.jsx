@@ -81,7 +81,7 @@ const Torens = () => {
                   <div key={toren.id} className="toren-item">
                     <span><b>{toren.naam}</b></span>
                     <span>{toren.locatie}</span>
-                    <button onClick={() => setEditToren(toren)}>Bewerken</button>
+                    <button onClick={() => setEditToren(toren)}>Bijwerken</button>
                     <button onClick={() => handleVerwijderen(toren.naam)}>Verwijderen</button>
                   </div>
                 ))}

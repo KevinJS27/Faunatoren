@@ -77,7 +77,7 @@ const Huisjes = () => {
                 <div key={huis.id} className="huisje-item">
                   <span><b>{huis.toren}</b></span>
                   <span>{huis.naam}</span>
-                  <button onClick={() => setEditHuisje(huis)}>Bewerken</button>
+                  <button onClick={() => setEditHuisje(huis)}>Bijwerken</button>
                   <button onClick={() => handleVerwijderen(huis.naam)}>Verwijderen</button>
                 </div>
               ))}
