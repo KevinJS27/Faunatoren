@@ -90,7 +90,7 @@ const Huisjes = () => {
           {/* Add/Edit */}
           <div className="col-12">
             <div className="form huisje-form">
-              <h2>{editHuisje ? 'Vogelhuisje bewerken' : 'Vogelhuisje toevoegen'}</h2>
+              <h2>{editHuisje ? 'Vogelhuisje bijwerken' : 'Vogelhuisje toevoegen'}</h2>
               <div className='wr-inputs'>
                 <div>
                   <label>Toren:</label>
