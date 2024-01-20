@@ -28,6 +28,9 @@ function App() {
   // State for the user
   const [user,setUser] = useState({name:"test",email:"email"}); 
 
+  // State voor gebruikersrollen
+  const [userRoles, setUserRoles] = useState([]); 
+
   // Function that handles the menu clicks
   const handleMenuItemClick = (menuItem) => {
     // If the user clicks on the user icon
@@ -59,7 +62,7 @@ function App() {
       {selectedMenu === 'dashboard' && <Dashboard />}
       {selectedMenu === 'torens' && <DashboardToren />}
       {selectedMenu === 'huisjes' && <DashboardHuisjes />}
-      {selectedMenu === 'logs' && <LogsComponent />}
+      {selectedMenu === 'logs' && userRoles.includes("Administrator", "Owner") && <LogsComponent />}
 
       <hr />
       {/* Login buttons*/}
@@ -68,8 +71,8 @@ function App() {
           <div className="col-12">
             <LoginButton />
             <LogoutButton />
-            <Profile user={setUser}/>
-            <Roles />
+            <Profile user={setUser} />
+            <Roles setUserRoles={setUserRoles} />
           </div>
         </div>
       </div>
