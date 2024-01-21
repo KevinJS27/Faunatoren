@@ -24,7 +24,7 @@ class huisjesDAL {
 
   // Function to update data
   updateData = async (huisjesUid, huisjesTorenNaam, naamHuisje) => {
-    const response = fetch("https://avans.duckdns.org:1880/uids", {
+    const response = await fetch("https://avans.duckdns.org:1880/uids", {
       method: "PUT",
       body: JSON.stringify({
         uid: huisjesUid,
@@ -42,9 +42,16 @@ class huisjesDAL {
   };
 
   // Function to delete data
-  deleteData = () => {
-    // Implement your logic for deleting data
-    console.log('Deleting data...');
+  deleteData = async (huisjeToDelete) => {
+    const response = await fetch("https://avans.duckdns.org:1880/uids", {
+      method: "DELETE",
+      body: JSON.stringify({
+        uid: huisjeToDelete.device_id
+      })
+    });
+
+    console.log('Deleting data: ', response);
+    
   };
 }
 

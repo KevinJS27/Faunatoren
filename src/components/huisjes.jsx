@@ -7,14 +7,14 @@ import './../style/components/huisjes.scss';
 import './../style/components/dialog.scss';
 
 const Huisjes = () => {
-  const [huisjes, setHuisjes] = useState([]);
+  const [huisjesArray, setHuisjesArray] = useState([]);
 
   const [editHuisje, setEditHuisje] = useState(null);
   const [nieuwHuisje, setNieuwHuisje] = useState({ uid: '', toren: '', naam: '' });
-  const [torens, setTorens] = useState([]);
+  const [torensArray, setTorensArray] = useState([]);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteHuisjeNaam, setDeleteHuisjeNaam] = useState(null);
+  const [huisjeToDelete, setHuisjeToDelete] = useState(null);
 
   useEffect(() => {
     const fetchTorens = async () => {
@@ -24,7 +24,7 @@ const Huisjes = () => {
       // Use the functions from the torensDAL class
       torensDALInstance.readData()
         .then(result => {
-          setTorens(result);
+          setTorensArray(result);
         });
     };
 
@@ -35,7 +35,7 @@ const Huisjes = () => {
       // Use the functions from the torensDAL class
       huisjesDALInstance.readData()
         .then(result => {
-          setHuisjes(result);
+          setHuisjesArray(result);
         });
     };
 
@@ -43,7 +43,7 @@ const Huisjes = () => {
     fetchHuisjes();
   }, []);
 
-  const handleToevoegen = (huisjesUid, huisjesTorenNaam, naamHuisje) => {
+  const handleToevoegen = (newHuisje) => {
     if (nieuwHuisje.toren === '') {
       alert('Er is op het moment geen toren geselecteerd. Selecteer eerst een toren en probeer het daarna opnieuw.');
       return;
@@ -57,47 +57,56 @@ const Huisjes = () => {
       return;
     }
 
-    console.log("Entered values: ", huisjesUid, huisjesTorenNaam, naamHuisje)
-
     const huisjesDALInstance = new huisjesDAL();
     try {
-      huisjesDALInstance.updateData(huisjesUid, huisjesTorenNaam, naamHuisje)
-      .then(result => {
-        if(result) {
-          setHuisjes([...huisjes, { id: Date.now(), ...nieuwHuisje }]);
-          setNieuwHuisje({ uid: '', toren: '', naam: '' }); // Reset values
-        }
+      huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam)
+      //update the huisjesArray
+
+      // TODO: Make this prettier :) / extraxt as function (duplicate of fetchTorens() function )
+      // Use the Read function from huisjeDAL
+      const huisjesDALInstance = new huisjesDAL();
+
+      // Use the functions from the torensDAL class
+      huisjesDALInstance.readData()
+        .then(result => {
+          setHuisjesArray(result);
       });
+
+      setNieuwHuisje({ uid: '', toren: '', naam: '' }); // Reset values
+
     } catch(e) {
       console.log(e);
     }
   };
 
   const handleBijwerken = () => {
-    const bijgewerkteHuisjes = huisjes.map(huis =>
+    const bijgewerkteHuisjes = huisjesArray.map(huis =>
       huis.id === editHuisje.id ? { ...huis, ...editHuisje } : huis
     );
-    setHuisjes(bijgewerkteHuisjes);
+    setHuisjesArray(bijgewerkteHuisjes);
     setEditHuisje(null);
   };
 
-  const handleVerwijderen = naam => {
-    setDeleteHuisjeNaam(naam);
+  const handleVerwijderen = (huis) => {
+    setHuisjeToDelete(huis);
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmVerwijderen = () => {
+  const handleConfirmVerwijderen = (huisjeToDeleteParameter) => {
 
-    const huisjeToDelete = huisjes.find(huis => huis.naam === deleteHuisjeNaam)
-
-    if (huisjeToDelete) {
+    if (huisjeToDeleteParameter) {
       const inputNaam = document.getElementById('huisInput').value.trim();
 
-      if (inputNaam === deleteHuisjeNaam) {
-        const gefilterdeHuisjes = huisjes.filter(huis => huis.naam !== deleteHuisjeNaam);
-        setHuisjes(gefilterdeHuisjes);
+      if (inputNaam === huisjeToDeleteParameter.huisjesNaam) {
+        const gefilterdeHuisjes = huisjesArray.filter(huis => huis.device_id !== huisjeToDeleteParameter.device_id);
+
+        // delete instance
+        const huisjesDALInstance = new huisjesDAL();
+        const response = huisjesDALInstance.deleteData(huisjeToDeleteParameter);
+
+        setHuisjesArray(gefilterdeHuisjes);
         setShowDeleteDialog(false);
-        setDeleteHuisjeNaam(null);
+        setHuisjeToDelete(null);
       } else {
         alert('De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw')
       }
@@ -105,8 +114,9 @@ const Huisjes = () => {
   };
 
   const handleCancelVerwijderen = () => {
+
     setShowDeleteDialog(false);
-    setDeleteHuisjeNaam(null);
+    setHuisjeToDelete(null);
   };
 
   return (
@@ -118,7 +128,7 @@ const Huisjes = () => {
           <div className="col-12">
             <h1>Huisjes</h1>
             <div className="huisjes-list">
-              {huisjes
+              {huisjesArray
               .filter(huis => huis.huisjesNaam && huis.torenNaam) // Exclude huisjes without huisjesNaam or torenNaam
               .map(huis => (
                 <div key={huis.id} className="huisje-item">
@@ -126,7 +136,7 @@ const Huisjes = () => {
                   <span><b>{huis.torenNaam}</b></span>
                   <span>{huis.huisjesNaam}</span>
                   <button onClick={() => setEditHuisje(huis)}>Bijwerken</button>
-                  <button onClick={() => handleVerwijderen(huis.naam)}>Verwijderen</button>
+                  <button onClick={() => handleVerwijderen(huis)}>Verwijderen</button>
                 </div>
               ))}
             </div>
@@ -148,7 +158,7 @@ const Huisjes = () => {
                     onChange={e => setNieuwHuisje({ ...nieuwHuisje, uid: e.target.value })}
                   >
                     <option value="" disabled>Selecteer een Huisje</option>
-                    {huisjes
+                    {huisjesArray
                       .filter(huisje => !(huisje.huisjesNaam || huisje.torenNaam))
                       .map((huisje, index) => (
                         <option key={index} value={huisje.device_id}>
@@ -166,7 +176,7 @@ const Huisjes = () => {
                     onChange={e => (editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value }))}
                   >
                     <option value="" disabled>Selecteer een toren</option>
-                    {torens.map((toren, index) => (
+                    {torensArray.map((toren, index) => (
                       <option key={index} value={toren.torenNaam}>
                         {toren.torenNaam}
                       </option>
@@ -190,7 +200,7 @@ const Huisjes = () => {
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </>
               ) : (
-                <button onClick={() => handleToevoegen(nieuwHuisje.uid, nieuwHuisje.toren, nieuwHuisje.naam)}>Toevoegen</button>
+                <button onClick={() => handleToevoegen(nieuwHuisje)}>Toevoegen</button>
               )}
             </div>
           </div>
@@ -200,12 +210,12 @@ const Huisjes = () => {
         <>
           <div className="dialog-backdrop" />
           <dialog open={showDeleteDialog}>
-            <h2>U staat op het punt om "{deleteHuisjeNaam}" te verwijderen</h2>
+            <h2>U staat op het punt om "{huisjeToDelete.huisjesNaam}" te verwijderen</h2>
             <p>Voer de naam van het huisje in om het te verwijderen.
               Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
             <input className="select" type="text" name="huisje" id="huisInput" /><br />
 
-            <button onClick={handleConfirmVerwijderen}>Ja</button>
+            <button onClick={() => handleConfirmVerwijderen(huisjeToDelete)}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
           </dialog>
         </>
