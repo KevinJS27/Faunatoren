@@ -34,6 +34,7 @@ function MenuBar({ onMenuItemClick, user }) {
                             <li onClick={() => handleMenuItemClick('dashboard')}>Dashboard</li>
                             <li onClick={() => handleMenuItemClick('torens')}>Torens</li>
                             <li onClick={() => handleMenuItemClick('huisjes')}>Huisjes</li>
+                            <li onClick={() => handleMenuItemClick('logs')}>Logs</li>
                             <li id="user" onClick={() => handleMenuItemClick('user')} data-open={userMenuOpen}>
                                 <img src={userIcon} className="User" alt="Gebruiker informatie" />
                                 {userMenuOpen && user ? (

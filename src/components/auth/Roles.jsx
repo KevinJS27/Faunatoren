@@ -35,7 +35,7 @@ const Roles = (user) => {
       <button onClick={handleClick}>
         Click me
       </button>
-      <pre>{JSON.stringify(roles, null, 2)}</pre>
+      {console.log("Roles JSON: " + JSON.stringify(roles, null, 2))}
     </div>
   )
 }
