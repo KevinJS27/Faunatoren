@@ -21,25 +21,28 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root')).render(<App/>);
 
 function App() {
-  // State for menuitems
-  const [selectedMenu, setSelectedMenu] = useState("dashboard");
+    // State for menuitems
+    const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
-  // State for the user
-  const [user,setUser] = useState({name:"test",email:"email"}); 
+    // State for the user
+    const [user, setUser] = useState({ name: "test", email: "email" });
 
-  // Function that handles the menu clicks
-  const handleMenuItemClick = (menuItem) => {
-    // If the user clicks on the user icon
-    if (menuItem == "user") {
-      // Toggle the menu
-      let bool = JSON.parse(document.getElementById("user").dataset.open);
-      document.getElementById("user").setAttribute("data-open", !bool);
-    }
-    else {
-      setSelectedMenu(menuItem);
-      console.log(user);
-    }
-  };
+    // State for the user menu visibility
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+    // Function that handles the menu clicks
+    const handleMenuItemClick = (menuItem) => {
+        // If the user clicks on the user icon
+        if (menuItem === "user") {
+            // Toggle the menu visibility
+            console.log("test");
+            setUserMenuOpen((prevOpen) => !prevOpen);
+        } else {
+            setSelectedMenu(menuItem);
+            // Optionally close the user menu when clicking on other menu items
+            setUserMenuOpen(false);
+        }
+    };
 
   return (
     <Auth0Provider
@@ -52,9 +55,7 @@ function App() {
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />
-
-      {/* Conditionally render components based on selected menu item */}
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} setUserMenuOpen={setUserMenuOpen} />      {/* Conditionally render components based on selected menu item */}
       {selectedMenu === 'dashboard' && <Dashboard />}
       {selectedMenu === 'torens' && <DashboardToren />}
       {selectedMenu === 'huisjes' && <DashboardHuisjes />}
