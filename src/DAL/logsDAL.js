@@ -22,7 +22,6 @@ class logsDAL {
                 picture: hashedPicture,
             })
         });
-        console.log(response);
     }
 }
 
