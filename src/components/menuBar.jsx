@@ -6,7 +6,7 @@ import noUserIcon from './../assets/icons/noUserIcon.png';
 import './../style/components/menuBar.scss';
 import './../style/grid/_index.scss';
 
-function MenuBar({ onMenuItemClick, user }) {
+function MenuBar({ onMenuItemClick, user, stateUserRoles }) {
     const [userMenuOpen, setUserMenuOpen] = useState(false);
 
     const handleMenuItemClick = (menuItem) => {
@@ -23,6 +23,8 @@ function MenuBar({ onMenuItemClick, user }) {
     const handleUserMenuClick = (event) => {
         event.stopPropagation(); // Prevent the click event from reaching the document and closing the menu
     };
+    console.log(stateUserRoles);
+    const isAdmin = stateUserRoles.map(rol => console.log(rol));
 
     return (
         <div className="container-fluid menubar">
@@ -31,10 +33,13 @@ function MenuBar({ onMenuItemClick, user }) {
                     <div className="row">
                         <menu className="col-sm menu">
                             <img src={faunaTorenLogo} className="logo" alt="Faunatoren logo" />
+
                             <li onClick={() => handleMenuItemClick('dashboard')}>Dashboard</li>
                             <li onClick={() => handleMenuItemClick('torens')}>Torens</li>
                             <li onClick={() => handleMenuItemClick('huisjes')}>Huisjes</li>
-                            <li onClick={() => handleMenuItemClick('logs')}>Logs</li>
+                            {isAdmin &&
+                                <li onClick={() => handleMenuItemClick('logs')}>Logs</li>
+                            }
                             <li id="user" onClick={() => handleMenuItemClick('user')} data-open={userMenuOpen}>
                                 <img src={userIcon} className="User" alt="Gebruiker informatie" />
                                 {userMenuOpen && user ? (

@@ -63,7 +63,7 @@ function App() {
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} user={userState} />      {/* Conditionally render components based on selected menu item */}
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={userState} stateUserRoles={userRoles} />      {/* Conditionally render components based on selected menu item */}
 
       {/* Conditionally render components based on selected menu item */}
       {userState ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
@@ -76,7 +76,7 @@ function App() {
             <LoginButton />
             <LogoutButton />
             <Profile setUser={setUserState} />
-            {userState ? <Roles user={userState} /> : null}
+            {userState ? <Roles user={userState} setStateUserRoles={setUserRoles} /> : null}
           </div>
         </div>
       </div>
