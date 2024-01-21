@@ -29,10 +29,9 @@ const Huisjes = () => {
           setTorens(result);
         });
     };
-
+  
     fetchTorens();
-  }, []); // Empty dependency array to run only on mount
-
+  }, []);
 
   const handleToevoegen = () => {
     if (nieuwHuisje.toren === '') {
