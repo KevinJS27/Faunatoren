@@ -26,23 +26,14 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({name: "Naam",email:"email@gmail.com"});
 
   // State voor gebruikersrollen
   const [userRoles, setUserRoles] = useState([]);
 
   // Function that handles the menu clicks
   const handleMenuItemClick = (menuItem) => {
-    // If the user clicks on the user icon
-    if (menuItem == "user") {
-      // Toggle the menu
-      let bool = JSON.parse(document.getElementById("user").dataset.open);
-      document.getElementById("user").setAttribute("data-open", !bool);
-    }
-    else {
-      setSelectedMenu(menuItem);
-      console.log(user);
-    }
+    setSelectedMenu(menuItem);
   };
 
   let renderedComponent;
@@ -72,11 +63,11 @@ function App() {
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />      {/* Conditionally render components based on selected menu item */}
 
       {/* Conditionally render components based on selected menu item */}
       {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
-      
+
       <hr />
       {/* Login buttons*/}
       <div className="container">
@@ -89,6 +80,6 @@ function App() {
           </div>
         </div>
       </div>
-    </Auth0Provider>
+    </Auth0Provider >
   );
 }
