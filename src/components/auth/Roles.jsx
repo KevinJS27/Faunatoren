@@ -1,42 +1,32 @@
 import React, { useState, useEffect } from 'react';
 
-const Roles = (user) => {
-  const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=google-oauth2|105279969498319760361";
+const Roles = ({user, setStateUserRoles}) => {
+  const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=" + user.sub;
   const [roles, setRoles] = useState([]);
+
+  console.log("Roles JSON: " + JSON.stringify(roles, null, 2));
 
   useEffect(() => {
     fetch(api)
       .then((response) => response.json())
       .then((result) => {
+        console.log("API RESULT ################");
         console.log(result);
         setRoles(result);
+        setStateUserRoles(result);
       })
       .catch((error) => {
-        console.error('Error:', error);})
+        console.error('Error:', error);
+      })
   }, []);
 
-  const handleClick = () =>{
+  const handleClick = () => {
     console.log(user);
   };
 
   return (
-    <div>
-      <h1>React App met Auth0 User Roles</h1>
-      <table key="not-a-key">
-        {console.log(roles)}
-        {roles.map((rol, index) => (
-          <tr key="not-a-key">
-            <td>
-              <p key={index}>{rol.name}</p>
-            </td>
-          </tr>
-        ))}
-      </table>
-      <button onClick={handleClick}>
-        Click me
-      </button>
-      <pre>{JSON.stringify(roles, null, 2)}</pre>
-    </div>
+    <>
+    </>
   )
 }
 

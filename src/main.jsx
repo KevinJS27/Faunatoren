@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 // Login/ Auth0
 import { Auth0Provider } from '@auth0/auth0-react';
 import LoginButton from './components/auth/loginBtn';
-import LogoutButton from './components/auth/logoutBtn';
 import Profile from './components/auth/profile';
 import Roles from './components/auth/Roles';
 
@@ -26,8 +25,8 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
-  const [user, setUser] = useState({name: "Naam",email:"email@gmail.com"});
-
+  const [userState, setUserState] = useState();
+  
   // State voor gebruikersrollen
   const [userRoles, setUserRoles] = useState([]);
 
@@ -48,7 +47,7 @@ function App() {
       renderedComponent = <DashboardHuisjes />;
       break;
     case 'logs':
-      renderedComponent = /*userRoles.includes("Administrator", "Owner") ?*/ <LogsComponent /> /*: null*/;
+      renderedComponent = <LogsComponent />;
       break;
   }
 
@@ -58,27 +57,18 @@ function App() {
       clientId="cernTRpK8SxCXwI69sA594JLHc6FlrU4"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        //   // audience: "https://localhost:3000/",
-        //   // scope: "read:current_user update:current_user_metadata"
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />      {/* Conditionally render components based on selected menu item */}
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={userState} stateUserRoles={userRoles} />      {/* Conditionally render components based on selected menu item */}
 
       {/* Conditionally render components based on selected menu item */}
-      {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
+      {userState ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
 
-      <hr />
-      {/* Login buttons*/}
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <LogoutButton />
-            <Profile setUser={setUser} />
-            <Roles user={user} />
-          </div>
-        </div>
-      </div>
+      {/* user identificatie */}
+      <Profile setUser={setUserState} />
+      {userState ? <Roles user={userState} setStateUserRoles={setUserRoles} /> : null}
+
     </Auth0Provider >
   );
 }

@@ -18,6 +18,8 @@
     "auth0": "^4.2.0",
     "auth0-js": "^9.24.1",
     "chart.js": "^4.4.1",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "jose": "^5.1.1",
     "mongodb": "^6.3.0",
     "mongodb-client": "^0.0.0",
