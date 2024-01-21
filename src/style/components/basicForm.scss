@@ -9,8 +9,16 @@
 
     .wr-inputs {
         display: flex;
+        flex-wrap: wrap;
 
-        div:first-child {
+        @media only screen and (max-width: 550px) {
+            div,input,select {
+                width: 100%;
+            }
+        }
+
+        div {
+            min-width: 230px;
             margin-right: 2rem;
         }
     }

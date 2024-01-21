@@ -8,10 +8,10 @@ import torensDAL from "../DAL/torensDAL.js";
 
 function Dashboard() {
     const initialDatasetState = {
-        labels: ["Loading..."],
+        labels: ["Selecteer eerst een toren en een huisje..."],
         datasets: [
             {
-                label: "Loading data",
+                label: "Selecteer eerst een toren en een huisje.",
                 borderColor: "black",
                 data: [],
             },
@@ -120,8 +120,37 @@ function Dashboard() {
         }));
     }
 
+    // A function to place multiple line in a single graph
+    function multilineGraph() {
+        let data = {
+            labels: sensorData.temperature.labels, // Remove the extra array wrapping
+            datasets: [
+                {
+                    label: "Temperatuur",
+                    data: sensorData.temperature.datasets[0].data,
+                    borderColor: "red", // Add your desired color
+                },
+                {
+                    label: "Druk",
+                    data: sensorData.pressure.datasets[0].data,
+                    borderColor: "blue", // Add your desired color
+                },
+                {
+                    label: "CO2",
+                    data: sensorData.CO2.datasets[0].data,
+                    borderColor: "green", // Add your desired color
+                },
+            ],
+        };
+        return data;
+    }
+
     return (
         <>
+
+            {/*  */}
+            {/*  */}
+            {/*  */}
             <div className="container">
                 <div className="row">
                     <div className="col-12">
@@ -167,6 +196,12 @@ function Dashboard() {
                     </div>
                 </div>
 
+            </div>
+
+            {/*  */}
+            {/* Slider graphs */}
+            {/*  */}
+            <div className="container">
                 <div className="row">
                     {/* temp */}
                     <div className="col-md-4">
@@ -213,6 +248,9 @@ function Dashboard() {
                 </div>
             </div>
 
+            {/*  */}
+            {/* Line graphs */}
+            {/*  */}
             {/* Temperature line chart */}
             <div className="container">
                 <div className="row">
@@ -224,6 +262,30 @@ function Dashboard() {
                     </div>
                 </div>
             </div>
+
+            <div className="container">
+                {/* CO2 line chart */}
+                <div className="row">
+                    <div className="col">
+                        <div className="wr-diagram">
+                            <h3>Co2</h3>
+                            <Line className="temperature" data={sensorData.CO2} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="container">
+                {/* Pressure line chart */}
+                <div className="row">
+                    <div className="col">
+                        <div className="wr-diagram">
+                            <h3>Pressure</h3>
+                            <Line className="temperature" data={sensorData.pressure} />
+                        </div>
+                    </div>
+                </div>
+            </div >
         </>
     );
 }

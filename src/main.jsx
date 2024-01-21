@@ -26,7 +26,7 @@ function App() {
 
   // State for the user
   const [userState, setUserState] = useState();
-
+  
   // State voor gebruikersrollen
   const [userRoles, setUserRoles] = useState([]);
 
@@ -68,6 +68,7 @@ function App() {
       {/* user identificatie */}
       <Profile setUser={setUserState} />
       {userState ? <Roles user={userState} setStateUserRoles={setUserRoles} /> : null}
+
     </Auth0Provider >
   );
 }
