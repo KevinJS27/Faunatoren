@@ -23,30 +23,18 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root')).render(<App />);
 
 function App() {
-    // State for menuitems
-    const [selectedMenu, setSelectedMenu] = useState("dashboard");
+  // State for menuitems
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({name: "Naam",email:"email@gmail.com"});
 
   // State voor gebruikersrollen
   const [userRoles, setUserRoles] = useState([]);
 
-  // State for the user menu visibility
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-
   // Function that handles the menu clicks
   const handleMenuItemClick = (menuItem) => {
-    // If the user clicks on the user icon
-    if (menuItem === "user") {
-      // Toggle the menu visibility
-      console.log("test");
-      setUserMenuOpen((prevOpen) => !prevOpen);
-    } else {
-      setSelectedMenu(menuItem);
-      // Optionally close the user menu when clicking on other menu items
-      setUserMenuOpen(false);
-    }
+    setSelectedMenu(menuItem);
   };
 
   let renderedComponent;
@@ -76,7 +64,7 @@ function App() {
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} setUserMenuOpen={setUserMenuOpen} />      {/* Conditionally render components based on selected menu item */}
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />      {/* Conditionally render components based on selected menu item */}
 
       {/* Conditionally render components based on selected menu item */}
       {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}

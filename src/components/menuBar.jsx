@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import './../style/grid/_index.scss';
-import './../style/components/menuBar.scss';
+import LogoutButton from './auth/logoutBtn';
 import faunaTorenLogo from './../assets/icons/faunatorenLogo.png';
 import userIcon from './../assets/icons/userIcon.svg';
 import noUserIcon from './../assets/icons/noUserIcon.png';
+import './../style/components/menuBar.scss';
+import './../style/grid/_index.scss';
 
-function MenuBar({ onMenuItemClick, user, setUserMenuOpen }) {
-    const [userMenuOpen, setUserMenuOpenState] = useState(false);
+function MenuBar({ onMenuItemClick, user }) {
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
 
     const handleMenuItemClick = (menuItem) => {
-        onMenuItemClick(menuItem);
         if (menuItem === 'user') {
-            setUserMenuOpenState((prevOpen) => !prevOpen);
+            setUserMenuOpen((prevUserMenuOpen) => !prevUserMenuOpen);
+        } else {
+            // Optionally close the user menu when clicking on other menu items
+            setUserMenuOpen(false);
+            onMenuItemClick(menuItem);
         }
     };
 
@@ -39,7 +43,7 @@ function MenuBar({ onMenuItemClick, user, setUserMenuOpen }) {
                                             {/* Display user info */}
                                             <p><b>Gebruikersnaam:</b> {user.name}</p>
                                             <p><b>Email:</b> {user.email}</p>
-                                            <button>Uitloggen</button>
+                                            <LogoutButton />
                                         </div>
                                     </>
                                     </div>
