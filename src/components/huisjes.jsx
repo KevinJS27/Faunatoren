@@ -45,7 +45,7 @@ const Huisjes = () => {
 
   const handleToevoegen = () => {
     if (nieuwHuisje.toren === '') {
-      alert('ER is op het moment geen toren geselecteerd. Selecteer eerst een toren en probeer het daarna opnieuw.');
+      alert('Er is op het moment geen toren geselecteerd. Selecteer eerst een toren en probeer het daarna opnieuw.');
       return;
     }
 
@@ -98,7 +98,9 @@ const Huisjes = () => {
           <div className="col-12">
             <h1>Huisjes</h1>
             <div className="huisjes-list">
-              {huisjes.map(huis => (
+              {huisjes
+              .filter(huis => huis.huisjesNaam && huis.torenNaam) // Exclude huisjes without huisjesNaam or torenNaam
+              .map(huis => (
                 <div key={huis.id} className="huisje-item">
                   {console.log(huis)}
                   <span><b>{huis.torenNaam}</b></span>
@@ -118,6 +120,25 @@ const Huisjes = () => {
             <div className="form huisje-form">
               <h2>{editHuisje ? 'Vogelhuisje bijwerken' : 'Vogelhuisje toevoegen'}</h2>
               <div className='wr-inputs'>
+              {editHuisje ? null : (
+                <div>
+                  <label>UID:</label>
+                  <select
+                    value={nieuwHuisje.toren}
+                    onChange={e => setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value })}
+                  >
+                    <option value="" disabled>Selecteer een Huisje</option>
+                    {huisjes
+                      .filter(huisje => !(huisje.huisjesNaam || huisje.torenNaam))
+                      .map((huisje, index) => (
+                        <option key={index} value={huisje.device_id}>
+                          {huisje.device_id}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              )}
+
                 <div>
                   <label>Toren:</label>
                   <select
