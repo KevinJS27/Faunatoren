@@ -1,6 +1,6 @@
 // Huisjes.jsx
 import React, { useState, useEffect } from 'react';
-import torenDAL from "./../DAL/torensDAL.js";
+import torensDAL from "./../DAL/torensDAL.js";
 import './../style/components/basicForm.scss';
 import './../style/components/huisjes.scss';
 import './../style/components/dialog.scss';
@@ -13,9 +13,7 @@ const Huisjes = () => {
 
   const [editHuisje, setEditHuisje] = useState(null);
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
-  const [torens, setTorens] = useState();
-
-  const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
+  const [torens, setTorens] = useState([]);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteHuisjeNaam, setDeleteHuisjeNaam] = useState(null);
@@ -23,11 +21,13 @@ const Huisjes = () => {
   useEffect(() => {
     const fetchTorens = async () => {
       // Use the Read function from huisjeDAL
-      const torensDALInstance = new torenDAL();
+      const torensDALInstance = new torensDAL();
 
-      // Use the functions from the HuisjesDAL component
-      const TorensData = await torensDALInstance.readData();
-      setTorens(TorensData);
+      // Use the functions from the torensDAL class
+      torensDALInstance.readData()
+        .then(result => {
+          setTorens(result);
+        });
     };
 
     fetchTorens();
@@ -36,7 +36,7 @@ const Huisjes = () => {
 
   const handleToevoegen = () => {
     if (nieuwHuisje.toren === '') {
-      alert('Selecteer eerst een toren!');
+      alert('ER is op het moment geen toren geselecteerd. Selecteer eerst een toren en probeer het daarna opnieuw.');
       return;
     }
 
@@ -110,18 +110,18 @@ const Huisjes = () => {
               <div className='wr-inputs'>
                 <div>
                   <label>Toren:</label>
-                  {console.log(torens)}
                   <select
                     value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
                     onChange={e => (editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value }))}
                   >
                     <option value="" disabled>Selecteer een toren</option>
-                    {torenOpties.map(optie => (
-                      <option key={optie} value={optie}>
-                        {optie}
+                    {torens.map((toren, index) => (
+                      <option key={index} value={toren.torenNaam}>
+                        {toren.torenNaam}
                       </option>
                     ))}
                   </select>
+
                 </div>
                 <div>
                   <label>Naam:</label>
