@@ -26,7 +26,7 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({name: "Naam",email:"email@gmail.com"});
 
   // State voor gebruikersrollen
   const [userRoles, setUserRoles] = useState([]);
