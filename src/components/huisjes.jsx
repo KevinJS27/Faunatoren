@@ -57,9 +57,9 @@ const Huisjes = () => {
       return;
     }
 
-    const huisjesDALInstance = new huisjesDAL();
     try {
-      huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam)
+      const huisjesDALInstance2 = new huisjesDAL();
+      huisjesDALInstance2.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam)
       //update the huisjesArray
 
       // TODO: Make this prettier :) / extraxt as function (duplicate of fetchTorens() function )
