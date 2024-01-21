@@ -26,7 +26,7 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
-  const [user, setUser] = useState({name: "Naam",email:"email@gmail.com"});
+  const [userState, setUserState] = useState();
 
   // State voor gebruikersrollen
   const [userRoles, setUserRoles] = useState([]);
@@ -63,10 +63,10 @@ function App() {
       }}
     >
       {/* Menu */}
-      <MenuBar onMenuItemClick={handleMenuItemClick} user={user} />      {/* Conditionally render components based on selected menu item */}
+      <MenuBar onMenuItemClick={handleMenuItemClick} user={userState} />      {/* Conditionally render components based on selected menu item */}
 
       {/* Conditionally render components based on selected menu item */}
-      {user ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
+      {userState ? renderedComponent : <div className="container"><div className="row"><div className="col"><p>Log alstublieft in om gegevens in te zien.</p><br /><LoginButton /></div></div></div>}
 
       <hr />
       {/* Login buttons*/}
@@ -75,8 +75,8 @@ function App() {
           <div className="col-12">
             <LoginButton />
             <LogoutButton />
-            <Profile setUser={setUser} />
-            <Roles user={user} />
+            <Profile setUser={setUserState} />
+            {userState ? <Roles user={userState} /> : null}
           </div>
         </div>
       </div>
