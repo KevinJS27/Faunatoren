@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 const Roles = (user) => {
+  console.log("------------------------------");
+  console.log(user);
+  console.log("------------------------------");
   const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=google-oauth2|105279969498319760361";
   const [roles, setRoles] = useState([]);
 
@@ -14,10 +17,11 @@ const Roles = (user) => {
         setRoles(result);
       })
       .catch((error) => {
-        console.error('Error:', error);})
+        console.error('Error:', error);
+      })
   }, []);
 
-  const handleClick = () =>{
+  const handleClick = () => {
     console.log(user);
   };
 
