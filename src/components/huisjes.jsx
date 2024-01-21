@@ -1,15 +1,13 @@
 // Huisjes.jsx
 import React, { useState, useEffect } from 'react';
 import torensDAL from "./../DAL/torensDAL.js";
+import huisjesDAL from "./../DAL/huisjesDAL.js";
 import './../style/components/basicForm.scss';
 import './../style/components/huisjes.scss';
 import './../style/components/dialog.scss';
 
 const Huisjes = () => {
-  const [huisjes, setHuisjes] = useState([
-    { id: 1, toren: 'Toren 1', naam: 'Huisje 1' },
-    { id: 2, toren: 'Toren 2', naam: 'Huisje 2' },
-  ]);
+  const [huisjes, setHuisjes] = useState([]);
 
   const [editHuisje, setEditHuisje] = useState(null);
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
@@ -29,8 +27,20 @@ const Huisjes = () => {
           setTorens(result);
         });
     };
-  
+
+    const fetchHuisjes = async () => {
+      // Use the Read function from huisjeDAL
+      const huisjesDALInstance = new huisjesDAL();
+
+      // Use the functions from the torensDAL class
+      huisjesDALInstance.readData()
+        .then(result => {
+          setHuisjes(result);
+        });
+    };
+
     fetchTorens();
+    fetchHuisjes();
   }, []);
 
   const handleToevoegen = () => {
@@ -90,8 +100,9 @@ const Huisjes = () => {
             <div className="huisjes-list">
               {huisjes.map(huis => (
                 <div key={huis.id} className="huisje-item">
-                  <span><b>{huis.toren}</b></span>
-                  <span>{huis.naam}</span>
+                  {console.log(huis)}
+                  <span><b>{huis.torenNaam}</b></span>
+                  <span>{huis.huisjesNaam}</span>
                   <button onClick={() => setEditHuisje(huis)}>Bijwerken</button>
                   <button onClick={() => handleVerwijderen(huis.naam)}>Verwijderen</button>
                 </div>
@@ -137,7 +148,7 @@ const Huisjes = () => {
                   <button onClick={handleBijwerken}>Bijwerken</button>
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </>
-                ) : (
+              ) : (
                 <button onClick={handleToevoegen}>Toevoegen</button>
               )}
             </div>
