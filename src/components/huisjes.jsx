@@ -15,24 +15,24 @@ const Huisjes = () => {
   const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
   const [torens, setTorens] = useState();
 
-  const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
+  // const torenOpties = ['Toren 1', 'Toren 2', 'Toren 3', 'Toren 4'];
+  const [torenOpties, setTorenOpties] = useState([]);
+
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteHuisjeNaam, setDeleteHuisjeNaam] = useState(null);
 
   useEffect(() => {
-    const fetchTorens = async () => {
-      // Use the Read function from huisjeDAL
-      const torensDALInstance = new torenDAL();
-
-      // Use the functions from the HuisjesDAL component
-      const TorensData = await torensDALInstance.readData();
-      setTorens(TorensData);
+    const torensDAL = new torenDAL();
+  
+    const fetchData = () => {
+      torensDAL.readData()
+        .then(torens => setTorenOpties(torens))
+        .catch(error => console.error('Fout bij het ophalen van torens:', error));
     };
-
-    fetchTorens();
-  }, []); // Empty dependency array to run only on mount
-
+  
+    fetchData();
+  }, []);
 
   const handleToevoegen = () => {
     if (nieuwHuisje.toren === '') {
@@ -117,9 +117,9 @@ const Huisjes = () => {
                   >
                     <option value="" disabled>Selecteer een toren</option>
                     {torenOpties.map(optie => (
-                      <option key={optie} value={optie}>
-                        {optie}
-                      </option>
+                      <option key={optie._id} value={optie.torenNaam}>
+                      {optie.torenNaam}
+                    </option>
                     ))}
                   </select>
                 </div>
