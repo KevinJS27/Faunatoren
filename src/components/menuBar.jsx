@@ -23,9 +23,12 @@ function MenuBar({ onMenuItemClick, user, stateUserRoles }) {
     const handleUserMenuClick = (event) => {
         event.stopPropagation(); // Prevent the click event from reaching the document and closing the menu
     };
-    console.log(stateUserRoles);
-    const isAdmin = stateUserRoles.map(rol => console.log(rol));
 
+    const isBeheerder = stateUserRoles.some(rol => rol.name === "Beheerder");
+    const isAdmin = stateUserRoles.some(rol => rol.name === "Administrator");
+    const isOwner = stateUserRoles.some(rol => rol.name === "Owner");
+
+    console.log("MenuBar Roles: " + JSON.stringify(stateUserRoles, null, 2));
     return (
         <div className="container-fluid menubar">
             <div className="row">
@@ -33,11 +36,18 @@ function MenuBar({ onMenuItemClick, user, stateUserRoles }) {
                     <div className="row">
                         <menu className="col-sm menu">
                             <img src={faunaTorenLogo} className="logo" alt="Faunatoren logo" />
-
+                            {console.log(isOwner)}
+                            {console.log(isAdmin)}
+                            {console.log(isBeheerder)}
+                            {/* laat alleen menu items zien op basis van rechten van ingelogde gebruiker */}
                             <li onClick={() => handleMenuItemClick('dashboard')}>Dashboard</li>
-                            <li onClick={() => handleMenuItemClick('torens')}>Torens</li>
-                            <li onClick={() => handleMenuItemClick('huisjes')}>Huisjes</li>
-                            {isAdmin &&
+                            {(isOwner || isAdmin) &&
+                                <li onClick={() => handleMenuItemClick('torens')}>Torens</li>
+                            }
+                            {(isOwner || isAdmin || isBeheerder) &&
+                                <li onClick={() => handleMenuItemClick('huisjes')}>Huisjes</li>
+                            }
+                            {(isOwner || isAdmin) &&
                                 <li onClick={() => handleMenuItemClick('logs')}>Logs</li>
                             }
                             <li id="user" onClick={() => handleMenuItemClick('user')} data-open={userMenuOpen}>
