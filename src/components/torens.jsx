@@ -63,80 +63,92 @@ const Torens = () => {
     }
   };
 
-    const handleCancelVerwijderen = () => {
-      setShowDeleteDialog(false);
-      setDeleteTorenNaam(null);
-    };
+  const handleCancelVerwijderen = () => {
+    setShowDeleteDialog(false);
+    setDeleteTorenNaam(null);
+  };
 
-    return (
-      <>
-        <div className="container torens-container">
-          <div className="row">
+  return (
+    <>
+      <div className="container torens-container">
+        <div className="row">
 
-            {/* View */}
-            <div className="col-12">
-              <h1>Torens</h1>
-              <div className="torens-list">
-                {torens.map(toren => (
-                  <div key={toren.id} className="toren-item">
-                    <span><b>{toren.naam}</b></span>
-                    <span>{toren.locatie}</span>
-                    <button onClick={() => setEditToren(toren)}>Bijwerken</button>
-                    <button onClick={() => handleVerwijderen(toren.naam)}>Verwijderen</button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <hr />
-
-          {/* Toren toevoegen */}
-          <div className="row">
-            <div className="col-12">
-              <div className="form toren-form">
-                <h2>{editToren ? 'Toren bijwerken' : 'Toren toevoegen'}</h2>
-                <label>Naam:</label>
-                <input
-                  type="text"
-                  value={editToren ? editToren.naam : nieuweToren.naam}
-                  onChange={e => (editToren ? setEditToren({ ...editToren, naam: e.target.value }) : setNieuweToren({ ...nieuweToren, naam: e.target.value }))}
-                />
-                <label>Locatie:</label>
-                <input
-                  type="text"
-                  value={editToren ? editToren.locatie : nieuweToren.locatie}
-                  onChange={e => (editToren ? setEditToren({ ...editToren, locatie: e.target.value }) : setNieuweToren({ ...nieuweToren, locatie: e.target.value }))}
-                />
-                {editToren ? (
-                  <>
-                    <button onClick={handleBijwerken}>Bijwerken</button>
-                    <button onClick={() => setEditToren(null)}>Annuleren</button>
-                  </>                
-                  ) : (
-                  <button onClick={handleToevoegen}>Toevoegen</button>
-                )}
-              </div>
+          {/* View */}
+          <div className="col-12">
+            <h1>Torens</h1>
+            <div className="torens-list">
+              {torens.map(toren => (
+                <div key={toren.id} className="toren-item">
+                  <span><b>{toren.naam}</b></span>
+                  <span>{toren.locatie}</span>
+                  <button onClick={() => setEditToren(toren)}>Bijwerken</button>
+                  <button onClick={() => handleVerwijderen(toren.naam)}>Verwijderen</button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-        {showDeleteDialog && (
-          <>
-            <div className="dialog-backdrop" />
-            <dialog open={showDeleteDialog}>
-              <h2>U staat op het punt om "{deleteTorenNaam}" te verwijderen</h2>
-              <p>Voer de naam van de toren in om het te verwijderen.
-                Alle bijbehorende meet data van deze toren worden ook verwijderd.</p>
-              <input className="select" type="text" name="toren" id="torenInput" /><br />
-              <button onClick={handleConfirmVerwijderen}>Ja</button>
-              <button onClick={handleCancelVerwijderen}>Nee</button>
-            </dialog>
-          </>
-        )
-        };
-      </>
-    );
-  };
+        <hr />
+
+        {/* Toren toevoegen */}
+        <div className="row">
+
+          <div className="col-12">
+            <div className="form toren-form">
+
+              <h2>{editToren ? 'Toren bijwerken' : 'Toren toevoegen'}</h2>
+
+              <div className='wr-inputs'>
+
+                <div>
+                  <label>Naam:</label>
+                  <input
+                    type="text"
+                    value={editToren ? editToren.naam : nieuweToren.naam}
+                    onChange={e => (editToren ? setEditToren({ ...editToren, naam: e.target.value }) : setNieuweToren({ ...nieuweToren, naam: e.target.value }))}
+                  />
+                </div>
+
+                <div>
+                  <label>Locatie:</label>
+                  <input
+                    type="text"
+                    value={editToren ? editToren.locatie : nieuweToren.locatie}
+                    onChange={e => (editToren ? setEditToren({ ...editToren, locatie: e.target.value }) : setNieuweToren({ ...nieuweToren, locatie: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              {editToren ? (
+                <>
+                  <button onClick={handleBijwerken}>Bijwerken</button>
+                  <button onClick={() => setEditToren(null)}>Annuleren</button>
+                </>
+              ) : (
+                <button onClick={handleToevoegen}>Toevoegen</button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {showDeleteDialog && (
+        <>
+          <div className="dialog-backdrop" />
+          <dialog open={showDeleteDialog}>
+            <h2>U staat op het punt om "{deleteTorenNaam}" te verwijderen</h2>
+            <p>Voer de naam van de toren in om het te verwijderen.
+              Alle bijbehorende meet data van deze toren worden ook verwijderd.</p>
+            <input className="select" type="text" name="toren" id="torenInput" /><br />
+            <button onClick={handleConfirmVerwijderen}>Ja</button>
+            <button onClick={handleCancelVerwijderen}>Nee</button>
+          </dialog>
+        </>
+      )
+      };
+    </>
+  );
+};
 
 
-  export default Torens;
+export default Torens;
 
