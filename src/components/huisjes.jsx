@@ -57,11 +57,20 @@ const Huisjes = () => {
       return;
     }
 
-    console.log("Entered values: ", huisjesUid, huisjesTorenNaam, naamHuisje  )
-    // huisjesDALInstance.updateData(huisjesUid, huisjesTorenNaam, naamHuisje);
+    console.log("Entered values: ", huisjesUid, huisjesTorenNaam, naamHuisje)
 
-    setHuisjes([...huisjes, { id: Date.now(), ...nieuwHuisje }]);
-    setNieuwHuisje({ uid: '', toren: '', naam: '' }); // Reset values
+    const huisjesDALInstance = new huisjesDAL();
+    try {
+      huisjesDALInstance.updateData(huisjesUid, huisjesTorenNaam, naamHuisje)
+      .then(result => {
+        if(result) {
+          setHuisjes([...huisjes, { id: Date.now(), ...nieuwHuisje }]);
+          setNieuwHuisje({ uid: '', toren: '', naam: '' }); // Reset values
+        }
+      });
+    } catch(e) {
+      console.log(e);
+    }
   };
 
   const handleBijwerken = () => {

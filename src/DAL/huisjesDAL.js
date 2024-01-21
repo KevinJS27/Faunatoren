@@ -25,14 +25,20 @@ class huisjesDAL {
   // Function to update data
   updateData = async (huisjesUid, huisjesTorenNaam, naamHuisje) => {
     const response = fetch("https://avans.duckdns.org:1880/uids", {
-      method: "PATCH",
+      method: "PUT",
       body: JSON.stringify({
         uid: huisjesUid,
         torenNaam: huisjesTorenNaam,
         huisjesNaam: naamHuisje
       })
     });
+
     console.log('Updating data: ', response);
+
+    if(response) {
+      return true;
+    }
+    return false;
   };
 
   // Function to delete data
