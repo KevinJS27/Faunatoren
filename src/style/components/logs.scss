@@ -1,5 +1,17 @@
 .logsTable {
+    background-color: #54a364;
+    border-radius: 5px;
     max-width: 100%;
+
+    border: solid black 1px;
+
+    th{
+        font-size: 1.3rem;
+    }
+    th,
+    td {
+        border: solid black 1px;
+    }
 
     &.MBD {
         td {

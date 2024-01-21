@@ -29,7 +29,7 @@ const LogsComponent = () => {
             <div className="row">
                 <div className="col">
                     <h2>MongoDB Logs</h2>
-                    <table className='logsTable MBD'>
+                    <table className='logsTable MBD' cellspacing="0">
                         <tr>
                             <th>ID</th>
                             <th>IP</th>
@@ -55,7 +55,7 @@ const LogsComponent = () => {
                     </table>
 
                     <h2>Auth0 Logs</h2>
-                    <table className='logsTable AUTH0'>
+                    <table className='logsTable AUTH0' cellspacing="0">
                         <tr>
                             <th>ID</th>
                             <th>Type</th>
