@@ -30,7 +30,7 @@ const Huisjes = () => {
         });
     };
   
-    fetchData();
+    fetchTorens();
   }, []);
 
   const handleToevoegen = () => {
