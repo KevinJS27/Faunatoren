@@ -15,16 +15,24 @@ class huisjesDAL {
   };
 
   // Get all huisjes from 1 toren
-  readHuisjesPerToren = async (torenNaam) => {torenNaam = torenNaam.replace(" ","%%")
+  readHuisjesPerToren = async (torenNaam) => {
+    torenNaam = torenNaam.replace(" ","%%")
     const response = await fetch(`https://avans.duckdns.org:1880/uids?torennaam=${torenNaam}`)
     const result = await response.json();
     return result;
   };
 
   // Function to update data
-  updateData = () => {
-    // Implement your logic for updating data
-    console.log('Updating data...');
+  updateData = async (huisjesUid, huisjesTorenNaam, naamHuisje) => {
+    const response = fetch("https://avans.duckdns.org:1880/uids", {
+      method: "PATCH",
+      body: JSON.stringify({
+        uid: huisjesUid,
+        torenNaam: huisjesTorenNaam,
+        huisjesNaam: naamHuisje
+      })
+    });
+    console.log('Updating data: ', response);
   };
 
   // Function to delete data

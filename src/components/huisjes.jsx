@@ -10,7 +10,7 @@ const Huisjes = () => {
   const [huisjes, setHuisjes] = useState([]);
 
   const [editHuisje, setEditHuisje] = useState(null);
-  const [nieuwHuisje, setNieuwHuisje] = useState({ toren: '', naam: '' });
+  const [nieuwHuisje, setNieuwHuisje] = useState({ uid: '', toren: '', naam: '' });
   const [torens, setTorens] = useState([]);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -43,14 +43,25 @@ const Huisjes = () => {
     fetchHuisjes();
   }, []);
 
-  const handleToevoegen = () => {
+  const handleToevoegen = (huisjesUid, huisjesTorenNaam, naamHuisje) => {
     if (nieuwHuisje.toren === '') {
       alert('Er is op het moment geen toren geselecteerd. Selecteer eerst een toren en probeer het daarna opnieuw.');
       return;
     }
+    if (nieuwHuisje.naam === '') {
+      alert('Er is op het moment geen naam ingevoerd. Voer eerst een naam in en probeer het daarna opnieuw.');
+      return;
+    }
+    if (nieuwHuisje.uid === '') {
+      alert('Er is op het moment geen uid geselecteerd. Selecteer eerst een uid en probeer het daarna opnieuw.');
+      return;
+    }
+
+    console.log("Entered values: ", huisjesUid, huisjesTorenNaam, naamHuisje  )
+    // huisjesDALInstance.updateData(huisjesUid, huisjesTorenNaam, naamHuisje);
 
     setHuisjes([...huisjes, { id: Date.now(), ...nieuwHuisje }]);
-    setNieuwHuisje({ toren: '', locatie: '', aantal: 0 });
+    setNieuwHuisje({ uid: '', toren: '', naam: '' }); // Reset values
   };
 
   const handleBijwerken = () => {
@@ -102,7 +113,7 @@ const Huisjes = () => {
               .filter(huis => huis.huisjesNaam && huis.torenNaam) // Exclude huisjes without huisjesNaam or torenNaam
               .map(huis => (
                 <div key={huis.id} className="huisje-item">
-                  {console.log(huis)}
+                  {/* {console.log(huis)} */}
                   <span><b>{huis.torenNaam}</b></span>
                   <span>{huis.huisjesNaam}</span>
                   <button onClick={() => setEditHuisje(huis)}>Bijwerken</button>
@@ -124,8 +135,8 @@ const Huisjes = () => {
                 <div>
                   <label>UID:</label>
                   <select
-                    value={nieuwHuisje.toren}
-                    onChange={e => setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value })}
+                    value={nieuwHuisje.uid}
+                    onChange={e => setNieuwHuisje({ ...nieuwHuisje, uid: e.target.value })}
                   >
                     <option value="" disabled>Selecteer een Huisje</option>
                     {huisjes
@@ -170,7 +181,7 @@ const Huisjes = () => {
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </>
               ) : (
-                <button onClick={handleToevoegen}>Toevoegen</button>
+                <button onClick={() => handleToevoegen(nieuwHuisje.uid, nieuwHuisje.toren, nieuwHuisje.naam)}>Toevoegen</button>
               )}
             </div>
           </div>
