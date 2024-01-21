@@ -30,6 +30,12 @@ const LogsComponent = () => {
                 <div className="col">
                     <h2>MongoDB Logs</h2>
                     <table className='logsTable MBD'>
+                        <tr>
+                            <th>ID</th>
+                            <th>IP</th>
+                            <th>Username</th>
+                            <th>Action</th>
+                        </tr>
                         {mbdLogs.map((log, index) => (
                             <tr>
                                 <td>
@@ -50,6 +56,15 @@ const LogsComponent = () => {
 
                     <h2>Auth0 Logs</h2>
                     <table className='logsTable AUTH0'>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>IP</th>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                        </tr>
                         {logs.map((log, index) => (
                             <tr>
                                 <td>
