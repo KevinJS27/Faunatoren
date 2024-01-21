@@ -23,8 +23,8 @@ import './style/grid/_index.scss';
 const root = createRoot(document.getElementById('root')).render(<App />);
 
 function App() {
-  // State for menuitems
-  const [selectedMenu, setSelectedMenu] = useState("dashboard");
+    // State for menuitems
+    const [selectedMenu, setSelectedMenu] = useState("dashboard");
 
   // State for the user
   const [user, setUser] = useState();
