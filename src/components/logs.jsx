@@ -99,7 +99,6 @@ const LogsComponent = () => {
                             ))}
                         </tbody>
                     </table>
-                    <pre>{JSON.stringify(logs, null, 2)}</pre>
                 </div>
             </div>
         </div>

@@ -4,6 +4,8 @@ const Roles = (user) => {
   const api = "https://avans.duckdns.org:1880/auth0-userroles?userid=google-oauth2|105279969498319760361";
   const [roles, setRoles] = useState([]);
 
+  console.log("Roles JSON: " + JSON.stringify(roles, null, 2));
+
   useEffect(() => {
     fetch(api)
       .then((response) => response.json())
