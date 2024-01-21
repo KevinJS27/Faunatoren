@@ -144,7 +144,7 @@ function Dashboard() {
                                 ))}
                             </select>
                         ) : (
-                            <p>Er was een probleem met het inladen van de torens</p>
+                            <p>Er was een probleem met het inladen gegevens</p>
                         )}
 
                         {/* Select huisjes */}
@@ -163,9 +163,7 @@ function Dashboard() {
                                     </option>
                                 ))}
                             </select>
-                        ) : (
-                            <p>Er was een probleem met het inladen van de huisjes.</p>
-                        )}
+                        ) : (null)}
                     </div>
                 </div>
 
