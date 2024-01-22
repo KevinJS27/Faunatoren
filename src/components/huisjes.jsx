@@ -142,7 +142,16 @@ const Huisjes = () => {
                       <b>{huis.torenNaam}</b>
                     </span>
                     <span>{huis.huisjesNaam}</span>
-                    <button onClick={() => setEditHuisje(huis)}>
+                    <button onClick={ () => { 
+                        const torenSelectBox = document.getElementById("torenSelect");
+                        torenSelectBox.value = huis.torenNaam;
+
+                        const naamTextField = document.getElementById("naamSelect");
+                        naamTextField.value = huis.huisjesNaam;
+
+                        setEditHuisje(huis);
+                      }
+                      }>
                       Bijwerken
                     </button>
                     <button onClick={() => handleVerwijderen(huis)}>
@@ -190,6 +199,7 @@ const Huisjes = () => {
                 <div>
                   <label>Toren:</label>
                   <select
+                    id="torenSelect"
                     value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
                     onChange={(e) =>
                       editHuisje
@@ -203,7 +213,7 @@ const Huisjes = () => {
                           })
                     }
                   >
-                    <option value="" disabled>
+                    <option value={""} disabled>
                       Selecteer een toren
                     </option>
                     {torensArray.map((toren, index) => (
@@ -216,6 +226,7 @@ const Huisjes = () => {
                 <div>
                   <label>Naam:</label>
                   <input
+                    id="naamSelect"
                     type="text"
                     value={editHuisje ? editHuisje.naam : nieuwHuisje.naam}
                     onChange={(e) =>
@@ -229,12 +240,11 @@ const Huisjes = () => {
                   />
                 </div>
               </div>
-
               {editHuisje ? (
-                <>
+                <div className='Buttons'> 
                   <button onClick={handleBijwerken}>Bijwerken</button>
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
-                </>
+                </div>
               ) : (
                 <button onClick={() => handleToevoegen(nieuwHuisje)}>
                   Toevoegen
