@@ -80,11 +80,7 @@ const Huisjes = () => {
       resetSelectBoxes();
     } catch (e) {
       console.log(e);
-      setError({
-        errorType: "add",
-        errorText:
-          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
-      });
+      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
     }
   };
 
@@ -118,11 +114,7 @@ const Huisjes = () => {
       setEditHuisje(false);
     } catch (e) {
       console.log(e);
-      setError({
-        errorType: "add",
-        errorText:
-          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
-      });
+      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
     }
   };
 
