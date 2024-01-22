@@ -38,10 +38,7 @@ const Huisjes = () => {
         setHuisjesArray(huisjesResult);
       } catch (e) {
         console.error(e);
-        setError({
-          errorType: "add",
-          errorText: "Er is een fout opgetreden bij het ophalen van de gegevens. Probeer het later nog eens.",
-        });
+        setError({ errorType: "global", errorText: "Er is een fout opgetreden bij het ophalen van de gegevens. Probeer het later nog eens." });
       }
     };
 
@@ -50,10 +47,7 @@ const Huisjes = () => {
 
   const handleHuisjeToevoegen = async (newHuisje) => {
     if (nieuwHuisje.toren === "" || nieuwHuisje.naam === "" || nieuwHuisje.uid === "") {
-      setError({
-        errorType: "add",
-        errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt.",
-      });
+      setError({ errorType: "add", errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt." });
       return;
     }
 
@@ -70,11 +64,7 @@ const Huisjes = () => {
       setNieuwHuisje({ uid: "", toren: "", naam: "" });
     } catch (e) {
       console.log(e);
-      setError({
-        errorType: "add",
-        errorText:
-          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
-      });
+      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
     }
   };
 
@@ -106,11 +96,7 @@ const Huisjes = () => {
       setEditHuisje(false);
     } catch (e) {
       console.log(e);
-      setError({
-        errorType: "add",
-        errorText:
-          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
-      });
+      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
     }
   };
 
@@ -209,6 +195,7 @@ const Huisjes = () => {
                     <button onClick={() => handleVerwijderen(huis)}>Verwijderen</button>
                   </div>
                 ))}
+              {error.errorType === "global" ? (<p className="error">{error.errorText}</p>) : null}
             </div>
           </div>
         </div>
@@ -296,11 +283,9 @@ const Huisjes = () => {
                 </button>
               )}
             </div>
-
           </div>
         </div>
       </div>
-      {showDeleteDialog}
     </>
   );
 };
