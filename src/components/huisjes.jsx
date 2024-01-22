@@ -266,8 +266,9 @@ const Huisjes = () => {
                   <button onClick={() => handleHuisjeToevoegen()}>
                     Toevoegen
                   </button>
-                )}
-            </div>
+                )
+              }
+            </div >
           </div >
         </div >
 
