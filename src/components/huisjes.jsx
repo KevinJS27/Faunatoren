@@ -54,8 +54,7 @@ const Huisjes = () => {
   }, []);
 
   const handleToevoegen = async (newHuisje) => {
-    if (nieuwHuisje.toren === "" || nieuwHuisje.naam === "" || nieuwHuisje.uid === ""
-    ) {
+    if (nieuwHuisje.toren === "" || nieuwHuisje.naam === "" || nieuwHuisje.uid === "") {
       setError({ errorType: "add", errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt." });
       return;
     }
@@ -78,12 +77,36 @@ const Huisjes = () => {
   };
 
   // Onclick on bijwerken button in the view
-  const handleBijwerken = () => {
-    const bijgewerkteHuisjes = huisjesArray.map((huis) =>
-      huis.id === editHuisje.id ? { ...huis, ...editHuisje } : huis
-    );
-    setHuisjesArray(bijgewerkteHuisjes);
-    setEditHuisje(null);
+  const handleBijwerken = async (huisjeToEdit) => {
+    setError({ errorType: "", errorText: "" });
+
+    // If no new torennaam and huisjesnaam naam has been entererd, do nothing 
+    if (!(huisjeToEdit.toren || huisjeToEdit.naam)) {
+      setError({ errorType: "add", errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt." });
+      return;
+    }
+
+    // Get the values for the update of the huisje
+    const uid = huisjeToEdit.device_id;
+    const naamHuisje = huisjeToEdit.naam ? huisjeToEdit.naam : huisjeToEdit.huisjesNaam;
+    const naamToren = huisjeToEdit.toren ? huisjeToEdit.toren : huisjeToEdit.torenNaam;
+
+    try {
+      // Update database with new huisjes information
+      const huisjesDALInstance = new huisjesDAL();
+      await huisjesDALInstance.updateData(uid, naamToren, naamHuisje);
+
+      // Fetch and update huisjesArray after the state has been updated
+      huisjesDALInstance.readData().then((result) => {
+        setHuisjesArray(result);
+      });
+
+      // Reset the values in the input forms
+      setEditHuisje(false);
+    } catch (e) {
+      console.log(e);
+      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
+    }
   };
 
   const handleVerwijderen = (huis) => {
@@ -258,7 +281,7 @@ const Huisjes = () => {
               {/* Buttons to add or edit */}
               {editHuisje ? (
                 <div className='Buttons'>
-                  <button onClick={handleBijwerken}>Bijwerken</button>
+                  <button onClick={() => handleBijwerken(editHuisje)}>Bijwerken</button>
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </div>
               ) : (
