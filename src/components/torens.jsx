@@ -51,7 +51,6 @@ const Torens = () => {
       setError({ errorType: "add", errorText: "Vul alle velden in om een nieuwe toren toe te voegen." });
       return;
     }
-
     // nieuweToren
     const torenNaam = nieuweToren.torenNaam;
     const torenLocatie = nieuweToren.torenLocatie;
@@ -117,7 +116,22 @@ const Torens = () => {
         errorText:
           "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
       });
-    }
+      const torenLocatie = nieuweToren.locatie;
+
+      const torensDALInstance = new torensDAL();
+      torensDALInstance.insertData(torenNaam, torenLocatie).then((result) => {
+        console.log(result);
+      });
+
+      // Use the functions from the torensDAL class
+      torensDALInstance.readData().then((result) => {
+        console.log(result);
+        setTorensArray(result);
+      });
+
+      // Empty the user input forms
+      setNieuweToren({ naam: "", locatie: "" });
+    };
   };
 
   const handleTorenVerwijderen = (toren) => {
@@ -181,12 +195,12 @@ const Torens = () => {
                   <span>Aantal huisjes: {toren.count}</span>
                   <button onClick={() => { setEditToren(toren); setError({ errorType: "", errorText: "" }); }}>Bijwerken</button>
                   <button onClick={() => handleTorenVerwijderen(toren)}>Verwijderen</button>
-                </div>
+                </div >
               ))}
               {error.errorType === "global" ? (<p className="error">{error.errorText}</p>) : null}
-            </div>
-          </div>
-        </div>
+            </div >
+          </div >
+        </div >
         <hr />
 
         {/* Toren toevoegen */}
@@ -235,10 +249,10 @@ const Torens = () => {
               ) : (
                 <button onClick={handleNieuweTorenToevoegen}>Toevoegen</button>
               )}
-            </div>
-          </div>
-        </div>
-      </div>
+            </div >
+          </div >
+        </div >
+      </div >
       {showDeleteDialog && (
         <>
           <div className="dialog-backdrop" />
@@ -257,7 +271,7 @@ const Torens = () => {
             <br />
             <button onClick={() => handleConfirmVerwijderen(torenToDelete)}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
-          </dialog>
+          </dialog >
         </>
       )}
       ;

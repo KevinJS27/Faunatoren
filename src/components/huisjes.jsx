@@ -42,7 +42,6 @@ const Huisjes = () => {
     fetchData();
   }, []);
 
-
   const resetSelectBoxes = () => {
     // If a huisje is being edited do not try to reset UID (The select box does not exists)
     if (!editHuisje) {
@@ -78,7 +77,11 @@ const Huisjes = () => {
       resetSelectBoxes();
     } catch (e) {
       console.log(e);
-      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
+      setError({
+        errorType: "add",
+        errorText:
+          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
+      });
     }
   };
 
@@ -87,14 +90,21 @@ const Huisjes = () => {
 
     // If no new torennaam and huisjesnaam naam has been entered, do nothing
     if (!(huisjeToEdit.toren || huisjeToEdit.naam)) {
-      setError({ errorType: "add", errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt." });
+      setError({
+        errorType: "add",
+        errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt.",
+      });
       return;
     }
 
     // Get the values for the update of the huisje
     const uid = huisjeToEdit.device_id;
-    const naamHuisje = huisjeToEdit.naam ? huisjeToEdit.naam : huisjeToEdit.huisjesNaam;
-    const naamToren = huisjeToEdit.toren ? huisjeToEdit.toren : huisjeToEdit.torenNaam;
+    const naamHuisje = huisjeToEdit.naam
+      ? huisjeToEdit.naam
+      : huisjeToEdit.huisjesNaam;
+    const naamToren = huisjeToEdit.toren
+      ? huisjeToEdit.toren
+      : huisjeToEdit.torenNaam;
 
     try {
       // Update database with new huisjes information
@@ -112,7 +122,11 @@ const Huisjes = () => {
       setEditHuisje(false);
     } catch (e) {
       console.log(e);
-      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
+      setError({
+        errorType: "add",
+        errorText:
+          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
+      });
     }
   };
 
@@ -132,7 +146,11 @@ const Huisjes = () => {
     // Get the input of the deleteDialog and check if it matches
     const inputNaam = document.getElementById("huisInput").value.trim();
     if (!(inputNaam === huisjeToDeleteParameter.huisjesNaam)) {
-      setError({ errorType: "dialog", errorText: "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw" });
+      setError({
+        errorType: "dialog",
+        errorText:
+          "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw",
+      });
       return;
     }
 
@@ -183,11 +201,13 @@ const Huisjes = () => {
                       const torenSelectBox = document.getElementById("torenSelect");
                       torenSelectBox.value = huis.torenNaam;
 
-                      const naamTextField = document.getElementById("naamSelect");
+                      const naamTextField =
+                        document.getElementById("naamSelect");
                       naamTextField.value = huis.huisjesNaam;
 
                       setEditHuisje(huis);
-                    }}>
+                    }}
+                    >
                       Bijwerken
                     </button>
                     <button onClick={() => handleVerwijderen(huis)}>Verwijderen</button>
