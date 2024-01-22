@@ -81,7 +81,6 @@ const Huisjes = () => {
       setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
     }
   };
-  
 
   // Onclick on bijwerken button in the view
   const handleBijwerken = async (huisjeToEdit) => {
@@ -192,12 +191,12 @@ const Huisjes = () => {
                       Bijwerken
                     </button>
                     <button onClick={() => handleVerwijderen(huis)}>Verwijderen</button>
-                  </div>
+                  </div >
                 ))}
               {error.errorType === "global" ? (<p className="error">{error.errorText}</p>) : null}
-            </div>
-          </div>
-        </div>
+            </div >
+          </div >
+        </div >
 
         <hr />
 
@@ -251,44 +250,47 @@ const Huisjes = () => {
                     value={editHuisje ? editHuisje.naam : null}
                     onChange={(e) => editHuisje ? setEditHuisje({ ...editHuisje, naam: e.target.value }) : null}
                   />
-                </div>
-              </div>
+                </div >
+              </div >
 
               {/* Show a error to the user */}
               {error.errorType === "add" || error.type === "edit" ? (<p className="error">{error.errorText}</p>) : null}
 
               {/* Buttons to add or edit */}
-              {editHuisje ? (
-                <div className="Buttons">
-                  <button onClick={() => handleBijwerken(editHuisje)}>Bijwerken</button>
-                  <button onClick={() => setEditHuisje(null)}>Annuleren</button>
-                </div>
-              ) : (
-                <button onClick={() => handleHuisjeToevoegen()}>
-                  Toevoegen
-                </button>
-              )}
+              {
+                editHuisje ? (
+                  <div className="Buttons">
+                    <button onClick={() => handleBijwerken(editHuisje)}>Bijwerken</button>
+                    <button onClick={() => setEditHuisje(null)}>Annuleren</button>
+                  </div>
+                ) : (
+                  <button onClick={() => handleHuisjeToevoegen()}>
+                    Toevoegen
+                  </button>
+                )}
             </div>
-          </div>
-        </div>
+          </div >
+        </div >
 
         {/* Delete Dialog */}
-        {showDeleteDialog ? <>
-          <div className="dialog-backdrop" />
-          <dialog open={true}>
-            <h2> U staat op het punt om "{showDeleteDialog.huisjesNaam}" te verwijderen</h2>
-            <p> Voer de naam van het huisje in om het te verwijderen. Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
-            <input className="select" type="text" name="huisje" id="huisInput" />
-            <br />
+        {
+          showDeleteDialog ? <>
+            <div className="dialog-backdrop" />
+            <dialog open={true}>
+              <h2> U staat op het punt om "{showDeleteDialog.huisjesNaam}" te verwijderen</h2>
+              <p> Voer de naam van het huisje in om het te verwijderen. Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
+              <input className="select" type="text" name="huisje" id="huisInput" />
+              <br />
 
-            {/* Show a error to the user */}
-            {error.errorType === "dialog" ? (<p className="error">{error.errorText}</p>) : null}
+              {/* Show a error to the user */}
+              {error.errorType === "dialog" ? (<p className="error">{error.errorText}</p>) : null}
 
-            <button onClick={() => handleConfirmVerwijderen(showDeleteDialog)}> Ja </button>
-            <button onClick={handleCancelVerwijderen}>Nee</button>
-          </dialog>
-        </> : null}
-      </div>
+              <button onClick={() => handleConfirmVerwijderen(showDeleteDialog)}> Ja </button>
+              <button onClick={handleCancelVerwijderen}>Nee</button>
+            </dialog>
+          </> : null
+        }
+      </div >
     </>
   );
 };
