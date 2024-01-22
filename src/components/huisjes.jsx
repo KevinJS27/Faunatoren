@@ -285,6 +285,7 @@ const Huisjes = () => {
             </div>
           </div>
         </div>
+        {showDeleteDialog}
       </div>
     </>
   );
