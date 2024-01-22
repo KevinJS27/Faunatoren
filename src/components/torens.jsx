@@ -97,8 +97,6 @@ const Torens = () => {
       newTorenLocatie: editToren.torenLocatie,
     };
 
-    console.log("updatedToren: ", updatedToren);
-
     try {
       // Update database with new huisjes information
       const torensDALInstance = new torensDAL();
