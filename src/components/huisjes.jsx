@@ -17,44 +17,35 @@ const Huisjes = () => {
   const [editHuisje, setEditHuisje] = useState(null);
 
   // Object huisjes that is being added
-  const [nieuwHuisje, setNieuwHuisje] = useState({
-    uid: "",
-    toren: "",
-    naam: "",
-  });
-
-  // Current huisje that the user wants to delete
-  const [huisjeToDelete, setHuisjeToDelete] = useState(null);
+  const [nieuwHuisje, setNieuwHuisje] = useState({ uid: "", toren: "", naam: "" });
 
   // A list of all the torens for in the select box
   const [torensArray, setTorensArray] = useState([]);
 
-  // If the Dialog needs to be shown or not
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  // confirm delete dialog 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(null);
 
   useEffect(() => {
-    const fetchTorens = async () => {
-      // Use the Read function from huisjeDAL
+    const fetchData = async () => {
       const torensDALInstance = new torensDAL();
-
-      // Use the functions from the torensDAL class
-      torensDALInstance.readData().then((result) => {
-        setTorensArray(result);
-      });
-    };
-
-    const fetchHuisjes = async () => {
-      // Use the Read function from huisjeDAL
       const huisjesDALInstance = new huisjesDAL();
 
-      // Use the functions from the torensDAL class
-      huisjesDALInstance.readData().then((result) => {
-        setHuisjesArray(result);
-      });
+      try {
+        const torensResult = await torensDALInstance.readData();
+        setTorensArray(torensResult);
+
+        const huisjesResult = await huisjesDALInstance.readData();
+        setHuisjesArray(huisjesResult);
+      } catch (e) {
+        console.error(e);
+        setError({
+          errorType: "add",
+          errorText: "Er is een fout opgetreden bij het ophalen van de gegevens. Probeer het later nog eens.",
+        });
+      }
     };
 
-    fetchTorens();
-    fetchHuisjes();
+    fetchData();
   }, []);
 
   const handleHuisjeToevoegen = async (newHuisje) => {
@@ -140,8 +131,28 @@ const Huisjes = () => {
 
   const handleVerwijderen = (huis) => {
     setError({ errorType: "", errorText: "" });
-    setHuisjeToDelete(huis);
     setShowDeleteDialog(true);
+    // Pass the huisje directly to the confirm function
+    // handleConfirmVerwijderen(huis);
+
+    // Pass the huisje directly to the showDeleteDialog function
+    setShowDeleteDialog(() => (
+      <>
+        <div className="dialog-backdrop" />
+        <dialog open={true}>
+          <h2> U staat op het punt om "{huis.huisjesNaam}" te verwijderen</h2>
+          <p> Voer de naam van het huisje in om het te verwijderen. Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
+          <input className="select" type="text" name="huisje" id="huisInput" />
+          <br />
+
+          {/* Show a error to the user */}
+          {error.errorType === "dialog" ? (<p className="error">{error.errorText}</p>) : null}
+
+          <button onClick={() => handleConfirmVerwijderen(huis)}> Ja </button>
+          <button onClick={handleCancelVerwijderen}>Nee</button>
+        </dialog>
+      </>
+    ));
   };
 
   const handleConfirmVerwijderen = (huisjeToDeleteParameter) => {
@@ -164,31 +175,33 @@ const Huisjes = () => {
 
     // delete the huisje from the database
     const huisjesDALInstance = new huisjesDAL();
-    const result = huisjesDALInstance.deleteData(huisjeToDeleteParameter);
-    if (!result) {
-      return;
-    }
+    huisjesDALInstance.deleteData(huisjeToDeleteParameter)
+      .then((result) => {
 
-    // Fetch and update huisjesArray after the state has been updated
-    huisjesDALInstance.readData().then((result) => {
-      console.log(result);
-      setHuisjesArray(result);
-    });
+        if (!result) {
+          return;
+        }
+
+        // Fetch and update huisjesArray after the state has been updated
+        huisjesDALInstance.readData().then((result) => {
+          console.log(result);
+          setHuisjesArray(result);
+        });
+      })
 
     setShowDeleteDialog(false);
-    setHuisjeToDelete(null);
   };
 
   const handleCancelVerwijderen = () => {
     setShowDeleteDialog(false);
-    setHuisjeToDelete(null);
   };
 
   return (
     <>
       <div className="container huisjes-container">
+
+        {/* View */}
         <div className="row">
-          {/* View */}
           <div className="col-12">
             <h1>Huisjes</h1>
             <div className="huisjes-list">
@@ -207,19 +220,16 @@ const Huisjes = () => {
 
                       const torenSelectBox = document.getElementById("torenSelect");
                       torenSelectBox.value = huis.torenNaam;
-                      
-                        const naamTextField =
-                          document.getElementById("naamSelect");
-                        naamTextField.value = huis.huisjesNaam;
 
-                        setEditHuisje(huis);
-                      }}
+                      const naamTextField = document.getElementById("naamSelect");
+                      naamTextField.value = huis.huisjesNaam;
+
+                      setEditHuisje(huis);
+                    }}
                     >
                       Bijwerken
                     </button>
-                    <button onClick={() => handleVerwijderen(huis)}>
-                      Verwijderen
-                    </button>
+                    <button onClick={() => handleVerwijderen(huis)}>Verwijderen</button>
                   </div>
                 ))}
             </div>
@@ -330,39 +340,7 @@ const Huisjes = () => {
           </div>
         </div>
       </div>
-      {showDeleteDialog && (
-        <>
-          <div className="dialog-backdrop" />
-          <dialog open={showDeleteDialog}>
-            <h2>
-              U staat op het punt om "{huisjeToDelete.huisjesNaam}" te
-              verwijderen
-            </h2>
-            <p>
-              Voer de naam van het huisje in om het te verwijderen. Alle
-              bijbehorende meet data van dit huisje worden ook verwijderd.
-            </p>
-            <input
-              className="select"
-              type="text"
-              name="huisje"
-              id="huisInput"
-            />
-            <br />
-
-            {/* Show a error to the user */}
-            {error.errorType === "dialog" ? (
-              <p className="error">{error.errorText}</p>
-            ) : null}
-
-            <button onClick={() => handleConfirmVerwijderen(huisjeToDelete)}>
-              Ja
-            </button>
-            <button onClick={handleCancelVerwijderen}>Nee</button>
-          </dialog>
-        </>
-      )}
-      ;
+      {showDeleteDialog}
     </>
   );
 };
