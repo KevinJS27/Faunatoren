@@ -207,7 +207,6 @@ const Huisjes = () => {
             <div className="form huisje-form">
               <h2> {editHuisje ? "Vogelhuisje bijwerken" : "Vogelhuisje toevoegen"} </h2>
               <div className="wr-inputs">
-
                 {/* Select UID (Only on add/create) */}
                 {editHuisje ? null : (
                   <div>
