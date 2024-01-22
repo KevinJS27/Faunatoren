@@ -15,8 +15,14 @@ const Torens = () => {
   const [editToren, setEditToren] = useState(null);
   const [nieuweToren, setNieuweToren] = useState({ torenNaam: "", torenLocatie: "" });
 
+  // A text to display message to the usser
+  const [error, setError] = useState({ errorType: "", errorText: "" });
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteTorenNaam, setDeleteTorenNaam] = useState(null);
+
+  // Current toren that the user wants to delete
+  const [torenToDelete, setTorenToDelete] = useState(null);
 
   // On page load
   useEffect(() => {
@@ -92,6 +98,8 @@ const Torens = () => {
       newTorenLocatie: editToren.torenLocatie,
     };
 
+    console.log("updatedToren: ", updatedToren);
+
     try {
       // Update database with new huisjes information
       const torensDALInstance = new torensDAL();
@@ -114,30 +122,54 @@ const Torens = () => {
     }
   };
 
-  const handleTorenVerwijderen = (naam) => {
-    setDeleteTorenNaam(naam);
+  const handleTorenVerwijderen = (toren) => {
+    setTorenToDelete(toren);
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmVerwijderen = () => {
-    const torenToDelete = torensArray.find(
-      (toren) => toren.naam === deleteTorenNaam
-    );
-
-    if (torenToDelete) {
-      const inputNaam = document.getElementById("torenInput").value.trim();
-
-      if (inputNaam === deleteTorenNaam) {
-        const gefilterdeTorens = torensArray.filter(
-          (toren) => toren.naam !== deleteTorenNaam
-        );
-        setTorensArray(gefilterdeTorens);
-        setShowDeleteDialog(false);
-        setDeleteTorenNaam(null);
-      } else {
-        alert("De ingevoerde torennaam komt niet overeen. Probeer opnieuw.");
-      }
+  const handleConfirmVerwijderen = (torenToDeleteParameter) => {
+    // If no valid toren is passed as an argument return
+    if (!torenToDeleteParameter) {
+      return;
     }
+
+    // Get the user inputed torennaam
+    const inputNaam = document.getElementById("torenInput").value.trim();
+
+    // check if input is the same as the selcted torennaam
+    if (inputNaam !== torenToDeleteParameter.torenNaam) {
+      setError({
+        errorType: "dialog",
+        errorText:
+          "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw",
+      });
+      return;
+    }
+
+    console.log(torenToDeleteParameter);
+
+    const torensDALInstance = new torensDAL();
+    if (torenToDeleteParameter.count === 0) {
+
+      torensDALInstance.deleteData(torenToDeleteParameter.torenNaam, torenToDeleteParameter.torenLocatie).then((result) => {
+        console.log(result);
+
+        // Use the functions from the torensDAL class
+        torensDALInstance.readData().then((result) => {
+          console.log(result);
+          setTorensArray(result);
+        });
+      });
+
+
+
+    } else {
+      console.log("Count is not zero")
+      // TODO: User promt met dat de toren niet leeg is en eerst de huisjes te verwijderen
+    }
+
+    setShowDeleteDialog(false);
+    setTorenToDelete(null);
   };
 
   const handleCancelVerwijderen = () => {
@@ -161,7 +193,7 @@ const Torens = () => {
                   <span>{toren.torenLocatie}</span>
                   <span>Aantal huisjes: {toren.count}</span>
                   <button onClick={() => setEditToren(toren)}>Bijwerken</button>
-                  <button onClick={() => handleTorenVerwijderen(toren.torenNaam)}>
+                  <button onClick={() => handleTorenVerwijderen(toren)}>
                     Verwijderen
                   </button>
                 </div>
@@ -223,7 +255,7 @@ const Torens = () => {
         <>
           <div className="dialog-backdrop" />
           <dialog open={showDeleteDialog}>
-            <h2>U staat op het punt om "{deleteTorenNaam}" te verwijderen</h2>
+            <h2>U staat op het punt om "{torenToDelete.torenNaam}" te verwijderen</h2>
             <p>
               Voer de naam van de toren in om het te verwijderen. Alle
               bijbehorende meet data van deze toren worden ook verwijderd.
@@ -235,7 +267,7 @@ const Torens = () => {
               id="torenInput"
             />
             <br />
-            <button onClick={handleConfirmVerwijderen}>Ja</button>
+            <button onClick={() => handleConfirmVerwijderen(torenToDelete)}>Ja</button>
             <button onClick={handleCancelVerwijderen}>Nee</button>
           </dialog>
         </>
