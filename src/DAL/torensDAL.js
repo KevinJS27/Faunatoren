@@ -6,6 +6,28 @@ class torensDAL {
     return result;
   };
 
+  insertData = async (naamOfToren, locatieOfToren) => {
+    try {
+      const response = await fetch("https://avans.duckdns.org:1880/torens", {
+        method: "POST",
+        body: JSON.stringify({
+          torenLocatie: locatieOfToren,
+          torenNaam: naamOfToren
+        })
+      });
+      if (response.ok) {
+        console.log('Data updated successfully');
+        return true;
+      } else {
+        console.error('Failed to update data:', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error updating data:', error);
+      return false;
+    }
+  }
+
   // Function to update data
   updateData = () => {
     // Implement your logic for updating data

@@ -17,7 +17,11 @@ const Huisjes = () => {
   const [editHuisje, setEditHuisje] = useState(null);
 
   // Object huisjes that is being added
-  const [nieuwHuisje, setNieuwHuisje] = useState({ uid: "", toren: "", naam: "", });
+  const [nieuwHuisje, setNieuwHuisje] = useState({
+    uid: "",
+    toren: "",
+    naam: "",
+  });
 
   // Current huisje that the user wants to delete
   const [huisjeToDelete, setHuisjeToDelete] = useState(null);
@@ -53,15 +57,26 @@ const Huisjes = () => {
     fetchHuisjes();
   }, []);
 
-  const handleToevoegen = async (newHuisje) => {
-    if (nieuwHuisje.toren === "" || nieuwHuisje.naam === "" || nieuwHuisje.uid === "") {
-      setError({ errorType: "add", errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt." });
+  const handleHuisjeToevoegen = async (newHuisje) => {
+    if (
+      nieuwHuisje.toren === "" ||
+      nieuwHuisje.naam === "" ||
+      nieuwHuisje.uid === ""
+    ) {
+      setError({
+        errorType: "add",
+        errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt.",
+      });
       return;
     }
 
     try {
       const huisjesDALInstance = new huisjesDAL();
-      await huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam);
+      await huisjesDALInstance.updateData(
+        newHuisje.uid,
+        newHuisje.toren,
+        newHuisje.naam
+      );
 
       // Fetch and update huisjesArray after the state has been updated
       huisjesDALInstance.readData().then((result) => {
@@ -72,7 +87,11 @@ const Huisjes = () => {
       setNieuwHuisje({ uid: "", toren: "", naam: "" });
     } catch (e) {
       console.log(e);
-      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
+      setError({
+        errorType: "add",
+        errorText:
+          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
+      });
     }
   };
 
@@ -80,16 +99,23 @@ const Huisjes = () => {
   const handleBijwerken = async (huisjeToEdit) => {
     setError({ errorType: "", errorText: "" });
 
-    // If no new torennaam and huisjesnaam naam has been entererd, do nothing 
+    // If no new torennaam and huisjesnaam naam has been entererd, do nothing
     if (!(huisjeToEdit.toren || huisjeToEdit.naam)) {
-      setError({ errorType: "add", errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt." });
+      setError({
+        errorType: "add",
+        errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt.",
+      });
       return;
     }
 
     // Get the values for the update of the huisje
     const uid = huisjeToEdit.device_id;
-    const naamHuisje = huisjeToEdit.naam ? huisjeToEdit.naam : huisjeToEdit.huisjesNaam;
-    const naamToren = huisjeToEdit.toren ? huisjeToEdit.toren : huisjeToEdit.torenNaam;
+    const naamHuisje = huisjeToEdit.naam
+      ? huisjeToEdit.naam
+      : huisjeToEdit.huisjesNaam;
+    const naamToren = huisjeToEdit.toren
+      ? huisjeToEdit.toren
+      : huisjeToEdit.torenNaam;
 
     try {
       // Update database with new huisjes information
@@ -105,7 +131,11 @@ const Huisjes = () => {
       setEditHuisje(false);
     } catch (e) {
       console.log(e);
-      setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
+      setError({
+        errorType: "add",
+        errorText:
+          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
+      });
     }
   };
 
@@ -125,7 +155,11 @@ const Huisjes = () => {
 
     // If the user input does not match the name of the huisje
     if (!(inputNaam === huisjeToDeleteParameter.huisjesNaam)) {
-      setError({ errorType: "dialog", errorText: "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw" });
+      setError({
+        errorType: "dialog",
+        errorText:
+          "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw",
+      });
       return;
     }
 
@@ -155,7 +189,6 @@ const Huisjes = () => {
     <>
       <div className="container huisjes-container">
         <div className="row">
-
           {/* View */}
           <div className="col-12">
             <h1>Huisjes</h1>
@@ -169,15 +202,19 @@ const Huisjes = () => {
                       <b>{huis.torenNaam}</b>
                     </span>
                     <span>{huis.huisjesNaam}</span>
-                    <button onClick={() => {
-                      const torenSelectBox = document.getElementById("torenSelect");
-                      torenSelectBox.value = huis.torenNaam;
+                    <button
+                      onClick={() => {
+                        const torenSelectBox =
+                          document.getElementById("torenSelect");
+                        torenSelectBox.value = huis.torenNaam;
 
-                      const naamTextField = document.getElementById("naamSelect");
-                      naamTextField.value = huis.huisjesNaam;
+                        const naamTextField =
+                          document.getElementById("naamSelect");
+                        naamTextField.value = huis.huisjesNaam;
 
-                      setEditHuisje(huis);
-                    }}>
+                        setEditHuisje(huis);
+                      }}
+                    >
                       Bijwerken
                     </button>
                     <button onClick={() => handleVerwijderen(huis)}>
@@ -186,20 +223,16 @@ const Huisjes = () => {
                   </div>
                 ))}
             </div>
-
           </div>
         </div>
 
         <hr />
 
         <div className="row">
-
           {/* Add/Edit */}
           <div className="col-12">
             <div className="form huisje-form">
-              <h2>
-                {editHuisje ? "Vogelhuisje bijwerken" : "Vogelhuisje toevoegen"}
-              </h2>
+              <h2> {editHuisje ? "Vogelhuisje bijwerken" : "Vogelhuisje toevoegen"} </h2>
               <div className="wr-inputs">
                 {/* Select UID (Only on add/create) */}
                 {editHuisje ? null : (
@@ -276,22 +309,25 @@ const Huisjes = () => {
               </div>
 
               {/* Show a error to the user */}
-              {error.errorType === "add" || error.type === "edit" ? <p className="error">{error.errorText}</p> : null}
+              {error.errorType === "add" || error.type === "edit" ? (
+                <p className="error">{error.errorText}</p>
+              ) : null}
 
               {/* Buttons to add or edit */}
               {editHuisje ? (
-                <div className='Buttons'>
-                  <button onClick={() => handleBijwerken(editHuisje)}>Bijwerken</button>
+                <div className="Buttons">
+                  <button onClick={() => handleBijwerken(editHuisje)}>
+                    Bijwerken
+                  </button>
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </div>
               ) : (
-                <button onClick={() => handleToevoegen(nieuwHuisje)}>
+                <button onClick={() => handleHuisjeToevoegen(nieuwHuisje)}>
                   Toevoegen
                 </button>
               )}
             </div>
           </div>
-
         </div>
       </div>
       {showDeleteDialog && (
@@ -306,11 +342,18 @@ const Huisjes = () => {
               Voer de naam van het huisje in om het te verwijderen. Alle
               bijbehorende meet data van dit huisje worden ook verwijderd.
             </p>
-            <input className="select" type="text" name="huisje" id="huisInput" />
+            <input
+              className="select"
+              type="text"
+              name="huisje"
+              id="huisInput"
+            />
             <br />
 
             {/* Show a error to the user */}
-            {error.errorType === "dialog" ? <p className="error">{error.errorText}</p> : null}
+            {error.errorType === "dialog" ? (
+              <p className="error">{error.errorText}</p>
+            ) : null}
 
             <button onClick={() => handleConfirmVerwijderen(huisjeToDelete)}>
               Ja
