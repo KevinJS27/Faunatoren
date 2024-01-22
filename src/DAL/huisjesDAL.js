@@ -24,34 +24,47 @@ class huisjesDAL {
 
   // Function to update data
   updateData = async (huisjesUid, huisjesTorenNaam, naamHuisje) => {
-    const response = await fetch("https://avans.duckdns.org:1880/uids", {
-      method: "PUT",
-      body: JSON.stringify({
-        uid: huisjesUid,
-        torenNaam: huisjesTorenNaam,
-        huisjesNaam: naamHuisje
-      })
-    });
+    try {
+      const response = await fetch("https://avans.duckdns.org:1880/uids", {
+        method: "PUT",
+        body: JSON.stringify({
+          uid: huisjesUid,
+          torenNaam: huisjesTorenNaam,
+          huisjesNaam: naamHuisje
+        })
+      });
 
-    console.log('Updating data: ', response);
-
-    if(response) {
-      return true;
+      if (response.ok) {
+        console.log('Data updated successfully');
+        return true;
+      } else {
+        console.error('Failed to update data:', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error updating data:', error);
+      return false;
     }
-    return false;
   };
 
   // Function to delete data
   deleteData = async (huisjeToDelete) => {
-    const response = await fetch("https://avans.duckdns.org:1880/uids", {
-      method: "DELETE",
-      body: JSON.stringify({
-        uid: huisjeToDelete.device_id
-      })
-    });
+    try {
+      const response = await fetch("https://avans.duckdns.org:1880/uids", {
+        method: "DELETE",
+        body: JSON.stringify({
+          uid: huisjeToDelete.device_id
+        })
+      });
 
-    console.log('Deleting data: ', response);
-    
+      if (response.ok) {
+        console.log('Data deleted successfully');
+      } else {
+        console.error('Failed to delete data:', response.status);
+      }
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
   };
 }
 
