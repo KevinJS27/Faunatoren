@@ -78,7 +78,6 @@ const Huisjes = () => {
 
   // Onclick on bijwerken button in the view
   const handleBijwerken = async (huisjeToEdit) => {
-    setError({ errorType: "", errorText: "" });
 
     // If no new torennaam and huisjesnaam naam has been entererd, do nothing 
     if (!(huisjeToEdit.toren || huisjeToEdit.naam)) {
@@ -170,6 +169,8 @@ const Huisjes = () => {
                     </span>
                     <span>{huis.huisjesNaam}</span>
                     <button onClick={() => {
+                      setError({ errorType: "", errorText: "" });
+
                       const torenSelectBox = document.getElementById("torenSelect");
                       torenSelectBox.value = huis.torenNaam;
 
