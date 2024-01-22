@@ -13,7 +13,7 @@ const Torens = () => {
   ]);
 
   const [editToren, setEditToren] = useState(null);
-  const [nieuweToren, setNieuweToren] = useState({ naam: "", locatie: "" });
+  const [nieuweToren, setNieuweToren] = useState({ torenNaam: "", torenLocatie: "" });
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteTorenNaam, setDeleteTorenNaam] = useState(null);
@@ -36,7 +36,7 @@ const Torens = () => {
 
   // Check if input is valid and not an empty string
   const isNieuweTorenValid = () => {
-    return nieuweToren.naam.trim() !== "" && nieuweToren.locatie.trim() !== "";
+    return nieuweToren.torenNaam.trim() !== "" && nieuweToren.torenLocatie.trim() !== "";
   };
 
   const handleNieuweTorenToevoegen = () => {
@@ -47,8 +47,8 @@ const Torens = () => {
     }
 
     // nieuweToren
-    const torenNaam = nieuweToren.naam;
-    const torenLocatie = nieuweToren.locatie;
+    const torenNaam = nieuweToren.torenNaam;
+    const torenLocatie = nieuweToren.torenLocatie;
 
     const torensDALInstance = new torensDAL();
     torensDALInstance.insertData(torenNaam, torenLocatie).then((result) => {
@@ -62,17 +62,56 @@ const Torens = () => {
     });
 
     // Empty the user input forms
-    setNieuweToren({ naam: "", locatie: "" });
+    setNieuweToren({ torenNaam: "", torenLocatie: "" });
   };
 
-  const handleTorenBijwerken = () => {
-    console.log("editToren: ", editToren);
+  const handleTorenBijwerken = async () => {
+    // If editToren is null, return
+    if (!editToren) {
+      return;
+    }
 
-    // const updatedTorens = torensArray.map(toren =>
-    //   toren.id === editToren.id ? { ...toren, ...editToren } : toren
-    // );
-    // setTorensArray(updatedTorens);
-    // setEditToren(null);
+    // If input not valid, return
+    if (editToren.torenNaam.trim() === "" || editToren.torenLocatie.trim() === "") {
+      alert("Vul alle velden in om de toren bij te werken.");
+      return;
+    }
+
+    // Find the index of the edited tower in the torensArray
+    const editedTorenIndex = torensArray.findIndex((toren) => toren._id === editToren._id);
+
+    // If the tower is found, create a new object with updated values
+    if (editedTorenIndex === -1) {
+      return;
+    }
+
+    // Make a new object that contains the old and new values of the toren
+    const updatedToren = {
+      ...torensArray[editedTorenIndex],
+      newTorenNaam: editToren.torenNaam,
+      newTorenLocatie: editToren.torenLocatie,
+    };
+
+    try {
+      // Update database with new huisjes information
+      const torensDALInstance = new torensDAL();
+      await torensDALInstance.updateData(updatedToren.torenNaam, updatedToren.torenLocatie, updatedToren.newTorenLocatie, updatedToren.newTorenNaam);
+
+      // Fetch and update huisjesArray after the state has been updated
+      torensDALInstance.readData().then((result) => {
+        setTorensArray(result);
+      });
+
+      // Reset the values in the input forms
+      setEditToren(false);
+    } catch (e) {
+      console.log(e);
+      setError({
+        errorType: "add",
+        errorText:
+          "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens.",
+      });
+    }
   };
 
   const handleTorenVerwijderen = (naam) => {
@@ -122,7 +161,7 @@ const Torens = () => {
                   <span>{toren.torenLocatie}</span>
                   <span>Aantal huisjes: {toren.count}</span>
                   <button onClick={() => setEditToren(toren)}>Bijwerken</button>
-                  <button onClick={() => handleTorenVerwijderen(toren.naam)}>
+                  <button onClick={() => handleTorenVerwijderen(toren.torenNaam)}>
                     Verwijderen
                   </button>
                 </div>
@@ -143,14 +182,11 @@ const Torens = () => {
                   <label>Naam:</label>
                   <input
                     type="text"
-                    value={editToren ? editToren.torenNaam : nieuweToren.naam}
+                    value={editToren ? editToren.torenNaam : nieuweToren.torenNaam}
                     onChange={(e) =>
                       editToren
-                        ? setEditToren({ ...editToren, naam: e.target.value })
-                        : setNieuweToren({
-                          ...nieuweToren,
-                          naam: e.target.value,
-                        })
+                        ? setEditToren({ ...editToren, torenNaam: e.target.value })
+                        : setNieuweToren({ ...nieuweToren, torenNaam: e.target.value })
                     }
                   />
                 </div>
@@ -159,18 +195,12 @@ const Torens = () => {
                   <label>Locatie:</label>
                   <input
                     type="text"
-                    value={
-                      editToren ? editToren.torenLocatie : nieuweToren.locatie
-                    }
+                    value={editToren ? editToren.torenLocatie : nieuweToren.torenLocatie}
                     onChange={(e) =>
                       editToren
-                        ? setEditToren({
-                          ...editToren,
-                          locatie: e.target.value,
-                        })
+                        ? setEditToren({ ...editToren, torenLocatie: e.target.value })
                         : setNieuweToren({
-                          ...nieuweToren,
-                          locatie: e.target.value,
+                          ...nieuweToren, torenLocatie: e.target.value,
                         })
                     }
                   />
