@@ -16,6 +16,9 @@ const Huisjes = () => {
   // Current huisje that is being edited
   const [editHuisje, setEditHuisje] = useState(null);
 
+  // Object huisjes that is being added
+  const [nieuwHuisje, setNieuwHuisje] = useState({ uid: "", toren: "", naam: "" });
+
   // A list of all the torens for in the select box
   const [torensArray, setTorensArray] = useState([]);
 
