@@ -43,41 +43,28 @@ const Huisjes = () => {
     fetchHuisjes();
   }, []);
 
-  const handleToevoegen = (newHuisje) => {
-    if (nieuwHuisje.toren === '') {
-      alert('Er is op het moment geen toren geselecteerd. Selecteer eerst een toren en probeer het daarna opnieuw.');
+  const handleToevoegen = async (newHuisje) => {
+    if (nieuwHuisje.toren === '' || nieuwHuisje.naam === '' || nieuwHuisje.uid === '') {
+      alert('Vul alle velden in voordat u een nieuw huisje toevoegt.');
       return;
     }
-    if (nieuwHuisje.naam === '') {
-      alert('Er is op het moment geen naam ingevoerd. Voer eerst een naam in en probeer het daarna opnieuw.');
-      return;
-    }
-    if (nieuwHuisje.uid === '') {
-      alert('Er is op het moment geen uid geselecteerd. Selecteer eerst een uid en probeer het daarna opnieuw.');
-      return;
-    }
-
-    const huisjesDALInstance = new huisjesDAL();
+  
     try {
-      huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam)
-      //update the huisjesArray
-
-      // TODO: Make this prettier :) / extraxt as function (duplicate of fetchTorens() function )
-      // Use the Read function from huisjeDAL
       const huisjesDALInstance = new huisjesDAL();
-
-      // Use the functions from the torensDAL class
-      huisjesDALInstance.readData()
-        .then(result => {
-          setHuisjesArray(result);
-      });
-
-      setNieuwHuisje({ uid: '', toren: '', naam: '' }); // Reset values
-
-    } catch(e) {
+      await huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam);
+  
+      // Fetch and update huisjesArray after the state has been updated
+      const updatedHuisjesArray = await huisjesDALInstance.readData();
+      setHuisjesArray(updatedHuisjesArray);
+  
+      // Reset the values in the input forms
+      setNieuwHuisje({ uid: '', toren: '', naam: '' });
+    } catch (e) {
       console.log(e);
+      alert('Er is een fout opgetreden bij het toevoegen van het huisje.');
     }
   };
+  
 
   const handleBijwerken = () => {
     const bijgewerkteHuisjes = huisjesArray.map(huis =>
@@ -92,25 +79,31 @@ const Huisjes = () => {
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmVerwijderen = (huisjeToDeleteParameter) => {
+  const handleConfirmVerwijderen = async (huisjeToDeleteParameter) => {
 
-    if (huisjeToDeleteParameter) {
-      const inputNaam = document.getElementById('huisInput').value.trim();
-
-      if (inputNaam === huisjeToDeleteParameter.huisjesNaam) {
-        const gefilterdeHuisjes = huisjesArray.filter(huis => huis.device_id !== huisjeToDeleteParameter.device_id);
-
-        // delete instance
-        const huisjesDALInstance = new huisjesDAL();
-        const response = huisjesDALInstance.deleteData(huisjeToDeleteParameter);
-
-        setHuisjesArray(gefilterdeHuisjes);
-        setShowDeleteDialog(false);
-        setHuisjeToDelete(null);
-      } else {
-        alert('De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw')
-      }
+    // If no valid huisje is passed as an argument
+    if (!huisjeToDeleteParameter) {
+      return;
     }
+
+    const inputNaam = document.getElementById('huisInput').value.trim();
+
+    // If the userinput does not match the name of the huisje
+    if (!(inputNaam === huisjeToDeleteParameter.huisjesNaam)) {
+      alert('De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw')
+      return;
+    }
+
+    // delete the huisje from the database
+    const huisjesDALInstance = new huisjesDAL();
+    const response = huisjesDALInstance.deleteData(huisjeToDeleteParameter);
+
+    // Fetch and update huisjesArray after the state has been updated
+    const updatedHuisjesArray = await huisjesDALInstance.readData();
+    setHuisjesArray(updatedHuisjesArray);
+
+    setShowDeleteDialog(false);
+    setHuisjeToDelete(null);
   };
 
   const handleCancelVerwijderen = () => {
