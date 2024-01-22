@@ -5,12 +5,7 @@ import "./../style/components/torens.scss";
 import "./../style/components/dialog.scss";
 
 const Torens = () => {
-  const [torensArray, setTorensArray] = useState([
-    // { id: 1, naam: 'Toren 1', locatie: 'Amsterdam' },
-    // { id: 2, naam: 'Toren 2', locatie: 'Utrecht' },
-    // { id: 3, naam: 'Toren 3', locatie: 'Den Bosch' },
-    // { id: 4, naam: 'Toren 4', locatie: 'Den Bosch' },
-  ]);
+  const [torensArray, setTorensArray] = useState([]);
 
   const [editToren, setEditToren] = useState(null);
   const [nieuweToren, setNieuweToren] = useState({ torenNaam: "", torenLocatie: "" });
@@ -27,14 +22,19 @@ const Torens = () => {
   // On page load
   useEffect(() => {
     const fetchTorens = async () => {
-      // Use the Read function from huisjeDAL
-      const torensDALInstance = new torensDAL();
+      try {
+        // Use the Read function from huisjeDAL
+        const torensDALInstance = new torensDAL();
 
-      // Use the functions from the torensDAL class
-      torensDALInstance.readData().then((result) => {
-        console.log(result);
-        setTorensArray(result);
-      });
+        // Use the functions from the torensDAL class
+        torensDALInstance.readData().then((result) => {
+          console.log(result);
+          setTorensArray(result);
+        });
+      }
+      catch (e) {
+        setError({ errorType: "global", errorText: "Er is een fout opgetreden bij het ophalen van de gegevens. Probeer het later nog eens." });
+      }
     };
 
     fetchTorens();
@@ -48,7 +48,7 @@ const Torens = () => {
   const handleNieuweTorenToevoegen = () => {
     // If input not valid, return
     if (!isNieuweTorenValid()) {
-      alert("Vul alle velden in om een nieuwe toren toe te voegen.");
+      setError({ errorType: "add", errorText: "Vul alle velden in om een nieuwe toren toe te voegen." });
       return;
     }
 
@@ -79,7 +79,7 @@ const Torens = () => {
 
     // If input not valid, return
     if (editToren.torenNaam.trim() === "" || editToren.torenLocatie.trim() === "") {
-      alert("Vul alle velden in om de toren bij te werken.");
+      setError({ errorType: "add", errorText: "Vul alle velden in om een nieuwe toren toe te voegen." });
       return;
     }
 
@@ -97,8 +97,6 @@ const Torens = () => {
       newTorenNaam: editToren.torenNaam,
       newTorenLocatie: editToren.torenLocatie,
     };
-
-    console.log("updatedToren: ", updatedToren);
 
     try {
       // Update database with new huisjes information
@@ -123,6 +121,7 @@ const Torens = () => {
   };
 
   const handleTorenVerwijderen = (toren) => {
+    setError({ errorType: "", errorText: "" });
     setTorenToDelete(toren);
     setShowDeleteDialog(true);
   };
@@ -136,36 +135,24 @@ const Torens = () => {
     // Get the user inputed torennaam
     const inputNaam = document.getElementById("torenInput").value.trim();
 
-    // check if input is the same as the selcted torennaam
+    // check if input is the same as the selected torennaam
     if (inputNaam !== torenToDeleteParameter.torenNaam) {
-      setError({
-        errorType: "dialog",
-        errorText:
-          "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw",
-      });
+      setError({ errorType: "dialog", errorText: "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw" });
       return;
     }
 
-    console.log(torenToDeleteParameter);
-
     const torensDALInstance = new torensDAL();
     if (torenToDeleteParameter.count === 0) {
-
       torensDALInstance.deleteData(torenToDeleteParameter.torenNaam, torenToDeleteParameter.torenLocatie).then((result) => {
-        console.log(result);
 
         // Use the functions from the torensDAL class
         torensDALInstance.readData().then((result) => {
-          console.log(result);
           setTorensArray(result);
         });
       });
 
-
-
     } else {
-      console.log("Count is not zero")
-      // TODO: User promt met dat de toren niet leeg is en eerst de huisjes te verwijderen
+      setError({ errorType: "global", errorText: "Er zitten nog vogelhuisjes in deze toren verwijder deze eerst." });
     }
 
     setShowDeleteDialog(false);
@@ -192,12 +179,11 @@ const Torens = () => {
                   </span>
                   <span>{toren.torenLocatie}</span>
                   <span>Aantal huisjes: {toren.count}</span>
-                  <button onClick={() => setEditToren(toren)}>Bijwerken</button>
-                  <button onClick={() => handleTorenVerwijderen(toren)}>
-                    Verwijderen
-                  </button>
+                  <button onClick={() => { setEditToren(toren); setError({ errorType: "", errorText: "" }); }}>Bijwerken</button>
+                  <button onClick={() => handleTorenVerwijderen(toren)}>Verwijderen</button>
                 </div>
               ))}
+              {error.errorType === "global" ? (<p className="error">{error.errorText}</p>) : null}
             </div>
           </div>
         </div>
@@ -239,10 +225,12 @@ const Torens = () => {
                 </div>
               </div>
 
+              {error.errorType === "add" ? (<p className="error">{error.errorText}</p>) : null}
+
               {editToren ? (
                 <>
                   <button onClick={handleTorenBijwerken}>Bijwerken</button>
-                  <button onClick={() => setEditToren(null)}>Annuleren</button>
+                  <button onClick={() => { setEditToren(null); setError({ errorType: "", errorText: "" }); }}>Annuleren</button>
                 </>
               ) : (
                 <button onClick={handleNieuweTorenToevoegen}>Toevoegen</button>
