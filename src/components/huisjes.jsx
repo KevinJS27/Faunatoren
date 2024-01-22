@@ -10,7 +10,7 @@ const Huisjes = () => {
   // A list with all the huisjes
   const [huisjesArray, setHuisjesArray] = useState([]);
 
-  // A text to display message to the usser
+  // A text to display message to the user
   const [error, setError] = useState({ errorType: "", errorText: "" });
 
   // Current huisje that is being edited
@@ -49,11 +49,7 @@ const Huisjes = () => {
   }, []);
 
   const handleHuisjeToevoegen = async (newHuisje) => {
-    if (
-      nieuwHuisje.toren === "" ||
-      nieuwHuisje.naam === "" ||
-      nieuwHuisje.uid === ""
-    ) {
+    if (nieuwHuisje.toren === "" || nieuwHuisje.naam === "" || nieuwHuisje.uid === "") {
       setError({
         errorType: "add",
         errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt.",
@@ -63,11 +59,7 @@ const Huisjes = () => {
 
     try {
       const huisjesDALInstance = new huisjesDAL();
-      await huisjesDALInstance.updateData(
-        newHuisje.uid,
-        newHuisje.toren,
-        newHuisje.naam
-      );
+      await huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam);
 
       // Fetch and update huisjesArray after the state has been updated
       huisjesDALInstance.readData().then((result) => {
@@ -89,23 +81,16 @@ const Huisjes = () => {
   // Onclick on bijwerken button in the view
   const handleBijwerken = async (huisjeToEdit) => {
 
-    // If no new torennaam and huisjesnaam naam has been entererd, do nothing
+    // If no new torennaam and huisjesnaam naam has been entered, do nothing
     if (!(huisjeToEdit.toren || huisjeToEdit.naam)) {
-      setError({
-        errorType: "add",
-        errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt.",
-      });
+      setError({ errorType: "add", errorText: "Vul ten minste 1 veld in voordat u een huisje bewerkt." });
       return;
     }
 
     // Get the values for the update of the huisje
     const uid = huisjeToEdit.device_id;
-    const naamHuisje = huisjeToEdit.naam
-      ? huisjeToEdit.naam
-      : huisjeToEdit.huisjesNaam;
-    const naamToren = huisjeToEdit.toren
-      ? huisjeToEdit.toren
-      : huisjeToEdit.torenNaam;
+    const naamHuisje = huisjeToEdit.naam ? huisjeToEdit.naam : huisjeToEdit.huisjesNaam;
+    const naamToren = huisjeToEdit.toren ? huisjeToEdit.toren : huisjeToEdit.torenNaam;
 
     try {
       // Update database with new huisjes information
@@ -131,9 +116,6 @@ const Huisjes = () => {
 
   const handleVerwijderen = (huis) => {
     setError({ errorType: "", errorText: "" });
-    setShowDeleteDialog(true);
-    // Pass the huisje directly to the confirm function
-    // handleConfirmVerwijderen(huis);
 
     // Pass the huisje directly to the showDeleteDialog function
     setShowDeleteDialog(() => (
@@ -165,11 +147,7 @@ const Huisjes = () => {
 
     // If the user input does not match the name of the huisje
     if (!(inputNaam === huisjeToDeleteParameter.huisjesNaam)) {
-      setError({
-        errorType: "dialog",
-        errorText:
-          "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw",
-      });
+      setError({ errorType: "dialog", errorText: "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw" });
       return;
     }
 
@@ -225,8 +203,7 @@ const Huisjes = () => {
                       naamTextField.value = huis.huisjesNaam;
 
                       setEditHuisje(huis);
-                    }}
-                    >
+                    }}>
                       Bijwerken
                     </button>
                     <button onClick={() => handleVerwijderen(huis)}>Verwijderen</button>
@@ -238,9 +215,10 @@ const Huisjes = () => {
 
         <hr />
 
+        {/* form */}
         <div className="row">
-          {/* Add/Edit */}
           <div className="col-12">
+
             <div className="form huisje-form">
               <h2> {editHuisje ? "Vogelhuisje bijwerken" : "Vogelhuisje toevoegen"} </h2>
               <div className="wr-inputs">
@@ -250,13 +228,8 @@ const Huisjes = () => {
                     <label>UID:</label>
                     <select
                       value={nieuwHuisje.uid}
-                      onChange={(e) =>
-                        setNieuwHuisje({ ...nieuwHuisje, uid: e.target.value })
-                      }
-                    >
-                      <option value="" disabled>
-                        Selecteer een Huisje
-                      </option>
+                      onChange={(e) => setNieuwHuisje({ ...nieuwHuisje, uid: e.target.value })}>
+                      <option value="" disabled>Selecteer een Huisje</option>
                       {huisjesArray
                         .filter(
                           (huisje) => !(huisje.huisjesNaam || huisje.torenNaam)
@@ -278,16 +251,9 @@ const Huisjes = () => {
                     value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
                     onChange={(e) =>
                       editHuisje
-                        ? setEditHuisje({
-                          ...editHuisje,
-                          toren: e.target.value,
-                        })
-                        : setNieuwHuisje({
-                          ...nieuwHuisje,
-                          toren: e.target.value,
-                        })
-                    }
-                  >
+                        ? setEditHuisje({ ...editHuisje, toren: e.target.value })
+                        : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value })
+                    }>
                     <option value={""} disabled>
                       Selecteer een toren
                     </option>
@@ -309,26 +275,19 @@ const Huisjes = () => {
                     onChange={(e) =>
                       editHuisje
                         ? setEditHuisje({ ...editHuisje, naam: e.target.value })
-                        : setNieuwHuisje({
-                          ...nieuwHuisje,
-                          naam: e.target.value,
-                        })
+                        : setNieuwHuisje({ ...nieuwHuisje, naam: e.target.value })
                     }
                   />
                 </div>
               </div>
 
               {/* Show a error to the user */}
-              {error.errorType === "add" || error.type === "edit" ? (
-                <p className="error">{error.errorText}</p>
-              ) : null}
+              {error.errorType === "add" || error.type === "edit" ? (<p className="error">{error.errorText}</p>) : null}
 
               {/* Buttons to add or edit */}
               {editHuisje ? (
                 <div className="Buttons">
-                  <button onClick={() => handleBijwerken(editHuisje)}>
-                    Bijwerken
-                  </button>
+                  <button onClick={() => handleBijwerken(editHuisje)}>Bijwerken</button>
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </div>
               ) : (
@@ -337,6 +296,7 @@ const Huisjes = () => {
                 </button>
               )}
             </div>
+
           </div>
         </div>
       </div>
