@@ -49,22 +49,26 @@ class huisjesDAL {
 
   // Function to delete data
   deleteData = async (huisjeToDelete) => {
+    let succes = false;
     try {
-      const response = await fetch("https://avans.duckdns.org:1880/uids", {
+      await fetch("https://avans.duckdns.org:1880/uids", {
         method: "DELETE",
         body: JSON.stringify({
           uid: huisjeToDelete.device_id
         })
-      });
-
-      if (response.ok) {
-        console.log('Data deleted successfully');
-      } else {
-        console.error('Failed to delete data:', response.status);
-      }
+      }).then(result => {
+        if (result.ok) {
+          console.log('Data deleted successfully');
+          succes = true;
+        } else {
+          console.error('Failed to delete data:', response.status);
+        }
+      })
     } catch (error) {
       console.error('Error deleting data:', error);
     }
+
+    return succes;
   };
 }
 
