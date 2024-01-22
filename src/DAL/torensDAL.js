@@ -54,9 +54,26 @@ class torensDAL {
   };
 
   // Function to delete data
-  deleteData = () => {
-    // Implement your logic for deleting data
-    console.log('Deleting data...');
+  deleteData = async (towerNameCurrent, towerLocationCurrent) => {
+    try {
+      const response = await fetch("https://avans.duckdns.org:1880/torens", {
+        method: "DELETE",
+        body: JSON.stringify({
+          current_towername: towerNameCurrent,
+          current_towerlocation: towerLocationCurrent
+        })
+      });
+      if (response.ok) {
+        console.log('Data Deleted successfully');
+        return true;
+      } else {
+        console.error('Failed to update data:', response.status);
+        return false;
+      }
+    } catch(error) {
+      console.error('Error updating data:', error);
+      return false;
+    }
   };
 }
 
