@@ -42,6 +42,7 @@ const Huisjes = () => {
     fetchData();
   }, []);
 
+
   const resetSelectBoxes = () => {
     // If a huisje is being edited do not try to reset UID (The select box does not exists)
     if (!editHuisje) {
@@ -80,6 +81,7 @@ const Huisjes = () => {
       setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
     }
   };
+  
 
   // Onclick on bijwerken button in the view
   const handleBijwerken = async (huisjeToEdit) => {

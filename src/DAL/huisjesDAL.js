@@ -16,7 +16,7 @@ class huisjesDAL {
 
   // Get all huisjes from 1 toren
   readHuisjesPerToren = async (torenNaam) => {
-    torenNaam = torenNaam.replace(" ","%%")
+    torenNaam = torenNaam.replace(" ", "%%")
     const response = await fetch(`https://avans.duckdns.org:1880/uids?torennaam=${torenNaam}`)
     const result = await response.json();
     return result;
