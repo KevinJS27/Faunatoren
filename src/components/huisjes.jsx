@@ -16,9 +16,6 @@ const Huisjes = () => {
   // Current huisje that is being edited
   const [editHuisje, setEditHuisje] = useState(null);
 
-  // Object huisjes that is being added
-  const [nieuwHuisje, setNieuwHuisje] = useState({ uid: "", toren: "", naam: "" });
-
   // A list of all the torens for in the select box
   const [torensArray, setTorensArray] = useState([]);
 
@@ -45,15 +42,31 @@ const Huisjes = () => {
     fetchData();
   }, []);
 
-  const handleHuisjeToevoegen = async (newHuisje) => {
-    if (nieuwHuisje.toren === "" || nieuwHuisje.naam === "" || nieuwHuisje.uid === "") {
+  const resetSelectBoxes = () => {
+    // If a huisje is being edited do not try to reset UID (The select box does not exists)
+    if (!editHuisje) {
+      document.getElementById("UIDSelect").value = "";
+    }
+    document.getElementById("torenSelect").value = "";
+    document.getElementById("naamSelect").value = "";
+  }
+
+  const handleHuisjeToevoegen = async () => {
+
+    // Get the data from the inputs
+    const UID = document.getElementById("UIDSelect");
+    const toren = document.getElementById("torenSelect");
+    const naam = document.getElementById("naamSelect");
+
+    // Return if there are any values empty
+    if (UID.value === "" || toren.value === "" || naam.value === "") {
       setError({ errorType: "add", errorText: "Vul alle velden in voordat u een nieuw huisje toevoegt." });
       return;
     }
 
     try {
       const huisjesDALInstance = new huisjesDAL();
-      await huisjesDALInstance.updateData(newHuisje.uid, newHuisje.toren, newHuisje.naam);
+      await huisjesDALInstance.updateData(UID.value, toren.value, naam.value);
 
       // Fetch and update huisjesArray after the state has been updated
       huisjesDALInstance.readData().then((result) => {
@@ -61,7 +74,7 @@ const Huisjes = () => {
       });
 
       // Reset the values in the input forms
-      setNieuwHuisje({ uid: "", toren: "", naam: "" });
+      resetSelectBoxes();
     } catch (e) {
       console.log(e);
       setError({ errorType: "add", errorText: "Er is een fout opgetreden bij het toevoegen van het huisje. Probeer het later nog eens." });
@@ -93,6 +106,8 @@ const Huisjes = () => {
       });
 
       // Reset the values in the input forms
+      resetSelectBoxes();
+      setError({ errorType: "", errorText: "" });
       setEditHuisje(false);
     } catch (e) {
       console.log(e);
@@ -113,9 +128,8 @@ const Huisjes = () => {
       return;
     }
 
+    // Get the input of the deleteDialog and check if it matches
     const inputNaam = document.getElementById("huisInput").value.trim();
-
-    // If the user input does not match the name of the huisje
     if (!(inputNaam === huisjeToDeleteParameter.huisjesNaam)) {
       setError({ errorType: "dialog", errorText: "De ingevoerde huisjesnaam komt niet overeen. Probeer opnieuw" });
       return;
@@ -132,7 +146,6 @@ const Huisjes = () => {
 
         // Fetch and update huisjesArray after the state has been updated
         huisjesDALInstance.readData().then((result) => {
-          console.log(result);
           setHuisjesArray(result);
         });
       })
@@ -193,18 +206,17 @@ const Huisjes = () => {
             <div className="form huisje-form">
               <h2> {editHuisje ? "Vogelhuisje bijwerken" : "Vogelhuisje toevoegen"} </h2>
               <div className="wr-inputs">
+
                 {/* Select UID (Only on add/create) */}
                 {editHuisje ? null : (
                   <div>
-                    <label>UID:</label>
-                    <select
-                      value={nieuwHuisje.uid}
-                      onChange={(e) => setNieuwHuisje({ ...nieuwHuisje, uid: e.target.value })}>
-                      <option value="" disabled>Selecteer een Huisje</option>
+                    <label for="UIDSelect">UID:</label>
+                    <select id="UIDSelect" type="text" >
+                      <option selected value="" disabled>Selecteer een Huisje</option>
+
+                      {/* Show only the available UIDs */}
                       {huisjesArray
-                        .filter(
-                          (huisje) => !(huisje.huisjesNaam || huisje.torenNaam)
-                        )
+                        .filter((huisje) => !(huisje.huisjesNaam || huisje.torenNaam))
                         .map((huisje, index) => (
                           <option key={index} value={huisje.device_id}>
                             {huisje.device_id}
@@ -216,15 +228,9 @@ const Huisjes = () => {
 
                 {/* Select torens */}
                 <div>
-                  <label>Toren:</label>
-                  <select
-                    id="torenSelect"
-                    value={editHuisje ? editHuisje.toren : nieuwHuisje.toren}
-                    onChange={(e) =>
-                      editHuisje
-                        ? setEditHuisje({ ...editHuisje, toren: e.target.value })
-                        : setNieuwHuisje({ ...nieuwHuisje, toren: e.target.value })
-                    }>
+                  <label for="torenSelect">Toren:</label>
+                  <select id="torenSelect"
+                    onChange={(e) => setEditHuisje({ ...editHuisje, toren: e.target.value })}>
                     <option value={""} disabled>
                       Selecteer een toren
                     </option>
@@ -239,15 +245,9 @@ const Huisjes = () => {
                 {/* Name for het huisje */}
                 <div>
                   <label>Naam:</label>
-                  <input
-                    id="naamSelect"
-                    type="text"
-                    value={editHuisje ? editHuisje.naam : nieuwHuisje.naam}
-                    onChange={(e) =>
-                      editHuisje
-                        ? setEditHuisje({ ...editHuisje, naam: e.target.value })
-                        : setNieuwHuisje({ ...nieuwHuisje, naam: e.target.value })
-                    }
+                  <input id="naamSelect" type="text"
+                    value={editHuisje ? editHuisje.naam : null}
+                    onChange={(e) => editHuisje ? setEditHuisje({ ...editHuisje, naam: e.target.value }) : null}
                   />
                 </div>
               </div>
@@ -262,13 +262,15 @@ const Huisjes = () => {
                   <button onClick={() => setEditHuisje(null)}>Annuleren</button>
                 </div>
               ) : (
-                <button onClick={() => handleHuisjeToevoegen(nieuwHuisje)}>
+                <button onClick={() => handleHuisjeToevoegen()}>
                   Toevoegen
                 </button>
               )}
             </div>
           </div>
         </div>
+
+        {/* Delete Dialog */}
         {showDeleteDialog ? <>
           <div className="dialog-backdrop" />
           <dialog open={true}>
