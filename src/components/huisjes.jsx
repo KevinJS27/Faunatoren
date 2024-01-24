@@ -181,7 +181,7 @@ const Huisjes = () => {
 
                       const torenSelectBox = document.getElementById("torenSelect");
                       torenSelectBox.value = huis.torenNaam;
-
+                      
                       const naamTextField = document.getElementById("naamSelect");
                       naamTextField.value = huis.huisjesNaam;
 
