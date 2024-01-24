@@ -104,23 +104,7 @@ const Huisjes = () => {
     setError({ errorType: "", errorText: "" });
 
     // Pass the huisje directly to the showDeleteDialog function
-    setShowDeleteDialog(() => (
-      <>
-        <div className="dialog-backdrop" />
-        <dialog open={true}>
-          <h2> U staat op het punt om "{huis.huisjesNaam}" te verwijderen</h2>
-          <p> Voer de naam van het huisje in om het te verwijderen. Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
-          <input className="select" type="text" name="huisje" id="huisInput" />
-          <br />
-
-          {/* Show a error to the user */}
-          {error.errorType === "dialog" ? (<p className="error">{error.errorText}</p>) : null}
-
-          <button onClick={() => handleConfirmVerwijderen(huis)}> Ja </button>
-          <button onClick={handleCancelVerwijderen}>Nee</button>
-        </dialog>
-      </>
-    ));
+    setShowDeleteDialog(huis);
   };
 
   const handleConfirmVerwijderen = (huisjeToDeleteParameter) => {
@@ -285,7 +269,21 @@ const Huisjes = () => {
             </div>
           </div>
         </div>
-        {showDeleteDialog}
+        {showDeleteDialog ? <>
+          <div className="dialog-backdrop" />
+          <dialog open={true}>
+            <h2> U staat op het punt om "{showDeleteDialog.huisjesNaam}" te verwijderen</h2>
+            <p> Voer de naam van het huisje in om het te verwijderen. Alle bijbehorende meet data van dit huisje worden ook verwijderd.</p>
+            <input className="select" type="text" name="huisje" id="huisInput" />
+            <br />
+
+            {/* Show a error to the user */}
+            {error.errorType === "dialog" ? (<p className="error">{error.errorText}</p>) : null}
+
+            <button onClick={() => handleConfirmVerwijderen(showDeleteDialog)}> Ja </button>
+            <button onClick={handleCancelVerwijderen}>Nee</button>
+          </dialog>
+        </> : null}
       </div>
     </>
   );
