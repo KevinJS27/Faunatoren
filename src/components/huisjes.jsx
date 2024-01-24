@@ -115,6 +115,11 @@ const Huisjes = () => {
     }
   };
 
+  const handleAnnulerenBijwerken = () => {
+    setEditHuisje(null);
+    resetSelectBoxes();
+  }
+
   const handleVerwijderen = (huis) => {
     setError({ errorType: "", errorText: "" });
 
@@ -231,10 +236,9 @@ const Huisjes = () => {
                 <div>
                   <label for="torenSelect">Toren:</label>
                   <select id="torenSelect"
-                    onChange={(e) => setEditHuisje({ ...editHuisje, toren: e.target.value })}>
-                    <option value={""} disabled>
-                      Selecteer een toren
-                    </option>
+                    onChange={(e) => editHuisje ? setEditHuisje({ ...editHuisje, toren: e.target.value }) : null}>
+                    <option selected value="" disabled>Selecteer een toren</option>
+
                     {torensArray.map((toren, index) => (
                       <option key={index} value={toren.torenNaam}>
                         {toren.torenNaam}
@@ -261,7 +265,7 @@ const Huisjes = () => {
                 editHuisje ? (
                   <div className="Buttons">
                     <button onClick={() => handleBijwerken(editHuisje)}>Bijwerken</button>
-                    <button onClick={() => setEditHuisje(null)}>Annuleren</button>
+                    <button onClick={() => handleAnnulerenBijwerken()}>Annuleren</button>
                   </div>
                 ) : (
                   <button onClick={() => handleHuisjeToevoegen()}>
