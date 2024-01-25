@@ -280,7 +280,7 @@ function Dashboard() {
                 <div className="row">
                     <div className="col">
                         <div className="wr-diagram">
-                            <h3>Pressure</h3>
+                            <h3>Luchtdruk</h3>
                             <Line className="temperature" data={sensorData.pressure} />
                         </div>
                     </div>
